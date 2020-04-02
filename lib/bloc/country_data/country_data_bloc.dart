@@ -8,9 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CountryDataBloc extends Bloc<CountryDataEvent, CountryDataState> {
   final CountryDataRepository countryDataRepository;
-  final String countryName;
 
-  CountryDataBloc({@required this.countryDataRepository, this.countryName})
+  CountryDataBloc({@required this.countryDataRepository})
       : assert(countryDataRepository != null);
 
   @override
@@ -22,11 +21,23 @@ class CountryDataBloc extends Bloc<CountryDataEvent, CountryDataState> {
 
     try {
       final countryData =
-          await countryDataRepository.fetchCountryData(countryName);
+          await countryDataRepository.fetchCountryData(event.countryName);
       yield CountryDataAvailable(countryData: countryData);
     } catch (e) {
       print(e);
       yield CountryDataError();
     }
+  }
+
+  @override
+  void onTransition(Transition<CountryDataEvent, CountryDataState> transition) {
+    // TODO: implement onTransition
+    super.onTransition(transition);
+  }
+
+  @override
+  void onEvent(CountryDataEvent event) {
+    // TODO: implement onEvent
+    super.onEvent(event);
   }
 }

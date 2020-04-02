@@ -1,3 +1,5 @@
 class CountryDataEvent {
-  const CountryDataEvent();
+  final String countryName;
+
+  const CountryDataEvent(this.countryName);
 }

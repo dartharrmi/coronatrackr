@@ -12,11 +12,16 @@ import 'package:latlong/latlong.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class CountryReport extends StatelessWidget {
+  final String countryName;
+
   final circular = Radius.circular(15);
+
+  CountryReport(this.countryName);
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<CountryDataBloc>(context).add(CountryDataEvent());
+    BlocProvider.of<CountryDataBloc>(context)
+        .add(CountryDataEvent(countryName));
 
     return SlidingUpPanel(
         color: Color(0xFF040d3b),

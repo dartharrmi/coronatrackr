@@ -125,17 +125,16 @@ class HomePage extends StatelessWidget {
     switch (index) {
       case 0:
         {
-          return Consumer<CountryNotifier>(
-            builder: (_, notifier, _) {
-              return BlocProvider(
-                create: (context) => CountryDataBloc(
-                  countryDataRepository: CountryDataRepository(),
-                  countryName: notifier.selectedCountryCode ?? notifier.defaultCountry,
-                ),
-                child: CountryReport(),
-              )
-            }
-          );
+          return Consumer<CountryNotifier>(builder: (context, notifier, child) {
+            return BlocProvider(
+              create: (context) => CountryDataBloc(
+                countryDataRepository: CountryDataRepository(),
+              ),
+              child: CountryReport(
+                notifier.selectedCountryCode ?? notifier.defaultCountry,
+              ),
+            );
+          });
         }
       default:
         {
