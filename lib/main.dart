@@ -85,8 +85,6 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Color(0x00FFFFFF),
         title: Center(
           child: Title(
             color: Colors.white,
