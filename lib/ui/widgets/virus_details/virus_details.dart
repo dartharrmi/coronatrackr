@@ -1,6 +1,6 @@
 import 'package:country_pickers/country_pickers.dart';
 import 'package:crownapp/model/models.dart';
-import 'package:crownapp/ui/text_style.dart';
+import 'package:crownapp/utils/text_style.dart';
 import 'package:crownapp/utils/country_utils.dart';
 import 'package:crownapp/utils/crown_app_icons.dart';
 import 'package:flutter/material.dart';

@@ -1,6 +1,6 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:crownapp/bloc/blocs.dart';
-import 'package:crownapp/ui/text_style.dart';
+import 'package:crownapp/utils/text_style.dart';
 import 'package:crownapp/ui/widgets/virus_details/virus_details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,12 +9,12 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-class CountryReport extends StatelessWidget {
+class CountryReportPage extends StatelessWidget {
   final String countryName;
 
   final circular = Radius.circular(15);
 
-  CountryReport(this.countryName);
+  CountryReportPage(this.countryName);
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +35,9 @@ class CountryReport extends StatelessWidget {
           builder: (context, state) {
             if (state is CountryDataError) {
               return _getError();
-            }
-
-            if (state is CountryDataLoading) {
+            } else if (state is CountryDataLoading) {
               return _getPanelProgressBar();
-            }
-
-            if (state is CountryDataAvailable) {
+            } else if (state is CountryDataAvailable) {
               return VirusDetails(
                 countryData: state.countryData,
               );
@@ -89,9 +85,9 @@ class CountryReport extends StatelessWidget {
                   ],
                 ),
               );*/
+            } else {
+              return Container();
             }
-
-            return Container();
           },
         ),
         body: BlocBuilder<CountryDataBloc, CountryDataState>(

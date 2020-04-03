@@ -5,7 +5,7 @@ import 'package:crownapp/bloc/blocs.dart';
 import 'package:crownapp/model/notifier/country_notifier.dart';
 import 'package:crownapp/model/notifier/navigation_model.dart';
 import 'package:crownapp/repository/country_data_repository.dart';
-import 'package:crownapp/ui/pages/country_report/country_report.dart';
+import 'package:crownapp/ui/pages/country_report/country_report_page.dart';
 import 'package:crownapp/ui/widgets/bottom_bar/notched_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -128,7 +128,7 @@ class HomePage extends StatelessWidget {
               create: (context) => CountryDataBloc(
                 countryDataRepository: CountryDataRepository(),
               ),
-              child: CountryReport(
+              child: CountryReportPage(
                 notifier.selectedCountryCode ?? notifier.defaultCountry,
               ),
             );
