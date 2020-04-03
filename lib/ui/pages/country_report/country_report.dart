@@ -131,45 +131,50 @@ class CountryReport extends StatelessWidget {
 
     // Country Details
     final countryCardContent = new Container(
-        margin: new EdgeInsets.fromLTRB(
-          76.0,
-          16.0,
-          16.0,
-          16.0,
-        ),
-        constraints: new BoxConstraints.expand(),
-        child: new Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+      margin: new EdgeInsets.fromLTRB(
+        30.0,
+        16.0,
+        16.0,
+        16.0,
+      ),
+      constraints: new BoxConstraints.expand(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(
+            height: 4.0,
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 26.0),
+            child: Text(
+              country.name,
+              style: Style.strongTitleTextStyle,
+            ),
+          ),
+          SizedBox(
+            height: 10.0,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              new SizedBox(
-                height: 4.0,
+              _statDetail(
+                value: '${latestConfirmedReport.cases} \nConfirmed',
+                image: CrownApp.iconfinder_emoji_emoticon_35_3638429,
               ),
-              new Text(
-                country.name,
-                style: Style.strongTitleTextStyle,
+              _statDetail(
+                value: '${latestDeathReport.cases} \nDeaths',
+                image: CrownApp.iconfinder_disease_29_5766041,
               ),
-              new SizedBox(
-                height: 10.0,
+              _statDetail(
+                value: '${latestrecoveredReport.cases} \nRecovered',
+                image: CrownApp
+                    .iconfinder_recovered_immune_strong_healthy_revive_5969421,
               ),
-              new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  _statDetail(
-                    value: latestConfirmedReport.cases.toString(),
-                    image: CrownApp.iconfinder_emoji_emoticon_35_3638429,
-                  ),
-                  _statDetail(
-                    value: latestDeathReport.cases.toString(),
-                    image: CrownApp.iconfinder_disease_29_5766041,
-                  ),
-                  _statDetail(
-                    value: latestrecoveredReport.cases.toString(),
-                    image: CrownApp
-                        .iconfinder_recovered_immune_strong_healthy_revive_5969421,
-                  ),
-                ],
-              ),
-            ]));
+            ],
+          ),
+        ],
+      ),
+    );
 
     // Flag
     final countryCardIcon = Container(
@@ -190,7 +195,7 @@ class CountryReport extends StatelessWidget {
     // Card
     final countryCardContainer = Container(
       child: countryCardContent,
-      height: 150.0,
+      height: 165.0,
       margin: new EdgeInsets.only(
         left: 47.5,
       ),
@@ -226,20 +231,23 @@ class CountryReport extends StatelessWidget {
   }
 
   Widget _statDetail({String value, IconData image}) {
-    return Column(children: <Widget>[
-      new Icon(
-        image,
-        size: 36.0,
-        color: Colors.white,
-      ),
-      new SizedBox(
-        height: 3.0,
-      ),
-      new Text(
-        value,
-        style: Style.commonTextStyle,
-      ),
-    ]);
+    return Column(
+      children: <Widget>[
+        new Icon(
+          image,
+          size: 36.0,
+          color: Colors.white,
+        ),
+        new SizedBox(
+          height: 3.0,
+        ),
+        new Text(
+          value,
+          textAlign: TextAlign.center,
+          style: Style.commonTextStyle,
+        ),
+      ],
+    );
   }
 
 //endregion
