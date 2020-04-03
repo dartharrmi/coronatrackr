@@ -19,4 +19,10 @@ class Style {
 
   static final headerTextStyle = baseTextStyle.copyWith(
       color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.w400);
+
+  static final hyperlink = baseTextStyle.copyWith(
+    color: Colors.white,
+    fontSize: 15.0,
+    decoration: TextDecoration.underline,
+  );
 }

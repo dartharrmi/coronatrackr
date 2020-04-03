@@ -1,9 +1,7 @@
-import 'package:country_pickers/country_pickers.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:crownapp/bloc/blocs.dart';
-import 'package:crownapp/model/response/country_data.dart';
 import 'package:crownapp/ui/text_style.dart';
-import 'package:crownapp/utils/country_utils.dart';
-import 'package:crownapp/utils/crown_app_icons.dart';
+import 'package:crownapp/ui/widgets/virus_details/virus_details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,7 +42,53 @@ class CountryReport extends StatelessWidget {
             }
 
             if (state is CountryDataAvailable) {
-              return _getPanelDetails(state.countryData);
+              return VirusDetails(
+                countryData: state.countryData,
+              );
+              /*final countryCardContainer = Container(
+                child: TimeSeriesRangeAnnotationChart.withSampleData(),
+                height: 165.0,
+                margin: new EdgeInsets.only(
+                  left: 47.5,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF333366),
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.circular(
+                    8.0,
+                  ),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 10.0,
+                      offset: Offset(0.0, 10.0),
+                    )
+                  ],
+                ),
+              );
+
+              final chart = Container(
+                  height: 165.0,
+                constraints: BoxConstraints.expand(),
+                margin: const EdgeInsets.symmetric(
+                  vertical: 16.0,
+                  horizontal: 24.0,
+                ),
+                child: countryCardContainer
+              );
+
+              return Container(
+                constraints: BoxConstraints.expand(),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Expanded(child: _getPanelDetails(state.countryData)),
+                    Expanded(child: chart),
+                    Expanded(child: chart),
+                    Expanded(child: chart),
+                  ],
+                ),
+              );*/
             }
 
             return Container();
@@ -114,142 +158,6 @@ class CountryReport extends StatelessWidget {
         ),
       );
 
-  Widget _getPanelDetails(List<CountryData> countryData) {
-    final country = CountryUtils.getCountryByName(countryData[0].name);
-
-    // Confirmed =|
-    final lengthConfirmed = countryData[0].details.length - 1;
-    final latestConfirmedReport = countryData[0].details[lengthConfirmed];
-
-    // Deaths =(
-    final deathsConfirmed = countryData[1].details.length - 1;
-    final latestDeathReport = countryData[1].details[deathsConfirmed];
-
-    // Recovere =)
-    final recoveredConfirmed = countryData[2].details.length - 1;
-    final latestrecoveredReport = countryData[2].details[recoveredConfirmed];
-
-    // Country Details
-    final countryCardContent = new Container(
-      margin: new EdgeInsets.fromLTRB(
-        30.0,
-        16.0,
-        16.0,
-        16.0,
-      ),
-      constraints: new BoxConstraints.expand(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(
-            height: 4.0,
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 26.0),
-            child: Text(
-              country.name,
-              style: Style.strongTitleTextStyle,
-            ),
-          ),
-          SizedBox(
-            height: 10.0,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              _statDetail(
-                value: '${latestConfirmedReport.cases} \nConfirmed',
-                image: CrownApp.iconfinder_emoji_emoticon_35_3638429,
-              ),
-              _statDetail(
-                value: '${latestDeathReport.cases} \nDeaths',
-                image: CrownApp.iconfinder_disease_29_5766041,
-              ),
-              _statDetail(
-                value: '${latestrecoveredReport.cases} \nRecovered',
-                image: CrownApp
-                    .iconfinder_recovered_immune_strong_healthy_revive_5969421,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-
-    // Flag
-    final countryCardIcon = Container(
-      padding: EdgeInsets.only(top: 10.0),
-      height: 95.0,
-      width: 95.0,
-      child: Center(
-        child: CircleAvatar(
-          radius: 42.0,
-          backgroundImage: AssetImage(
-            CountryPickerUtils.getFlagImageAssetPath(country.isoCode),
-            package: "country_pickers",
-          ),
-        ),
-      ),
-    );
-
-    // Card
-    final countryCardContainer = Container(
-      child: countryCardContent,
-      height: 165.0,
-      margin: new EdgeInsets.only(
-        left: 47.5,
-      ),
-      decoration: BoxDecoration(
-        color: const Color(0xFF333366),
-        shape: BoxShape.rectangle,
-        borderRadius: BorderRadius.circular(
-          8.0,
-        ),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10.0,
-            offset: Offset(0.0, 10.0),
-          )
-        ],
-      ),
-    );
-
-    return Container(
-      height: 124.0,
-      margin: const EdgeInsets.symmetric(
-        vertical: 16.0,
-        horizontal: 24.0,
-      ),
-      child: Stack(
-        children: <Widget>[
-          countryCardContainer,
-          countryCardIcon,
-        ],
-      ),
-    );
-  }
-
-  Widget _statDetail({String value, IconData image}) {
-    return Column(
-      children: <Widget>[
-        new Icon(
-          image,
-          size: 36.0,
-          color: Colors.white,
-        ),
-        new SizedBox(
-          height: 3.0,
-        ),
-        new Text(
-          value,
-          textAlign: TextAlign.center,
-          style: Style.commonTextStyle,
-        ),
-      ],
-    );
-  }
-
 //endregion
 
 //region Map
@@ -291,4 +199,58 @@ class CountryReport extends StatelessWidget {
         ),
       );
 //endregion
+}
+
+// Chart
+class TimeSeriesRangeAnnotationChart extends StatelessWidget {
+  final List<charts.Series> seriesList;
+  final bool animate;
+
+  TimeSeriesRangeAnnotationChart(this.seriesList, {this.animate});
+
+  /// Creates a [TimeSeriesChart] with sample data and no transition.
+  factory TimeSeriesRangeAnnotationChart.withSampleData() {
+    return new TimeSeriesRangeAnnotationChart(
+      _createSampleData(),
+      // Disable animations for image tests.
+      animate: false,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new charts.TimeSeriesChart(seriesList, animate: animate, behaviors: [
+      new charts.RangeAnnotation([
+        new charts.RangeAnnotationSegment(new DateTime(2017, 10, 4),
+            new DateTime(2017, 10, 15), charts.RangeAnnotationAxisType.domain),
+      ]),
+    ]);
+  }
+
+  /// Create one series with sample hard coded data.
+  static List<charts.Series<TimeSeriesSales, DateTime>> _createSampleData() {
+    final data = [
+      new TimeSeriesSales(new DateTime(2017, 9, 19), 5),
+      new TimeSeriesSales(new DateTime(2017, 9, 26), 25),
+      new TimeSeriesSales(new DateTime(2017, 10, 3), 100),
+      new TimeSeriesSales(new DateTime(2017, 10, 10), 75),
+    ];
+
+    return [
+      new charts.Series<TimeSeriesSales, DateTime>(
+        id: 'Sales',
+        domainFn: (TimeSeriesSales sales, _) => sales.time,
+        measureFn: (TimeSeriesSales sales, _) => sales.sales,
+        data: data,
+      )
+    ];
+  }
+}
+
+/// Sample time series data type.
+class TimeSeriesSales {
+  final DateTime time;
+  final int sales;
+
+  TimeSeriesSales(this.time, this.sales);
 }
