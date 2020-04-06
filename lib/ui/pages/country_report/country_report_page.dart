@@ -1,7 +1,6 @@
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:crownapp/bloc/blocs.dart';
-import 'package:crownapp/utils/text_style.dart';
 import 'package:crownapp/ui/widgets/virus_details/virus_details.dart';
+import 'package:crownapp/utils/text_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,50 +40,6 @@ class CountryReportPage extends StatelessWidget {
               return VirusDetails(
                 countryData: state.countryData,
               );
-              /*final countryCardContainer = Container(
-                child: TimeSeriesRangeAnnotationChart.withSampleData(),
-                height: 165.0,
-                margin: new EdgeInsets.only(
-                  left: 47.5,
-                ),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF333366),
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(
-                    8.0,
-                  ),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 10.0,
-                      offset: Offset(0.0, 10.0),
-                    )
-                  ],
-                ),
-              );
-
-              final chart = Container(
-                  height: 165.0,
-                constraints: BoxConstraints.expand(),
-                margin: const EdgeInsets.symmetric(
-                  vertical: 16.0,
-                  horizontal: 24.0,
-                ),
-                child: countryCardContainer
-              );
-
-              return Container(
-                constraints: BoxConstraints.expand(),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Expanded(child: _getPanelDetails(state.countryData)),
-                    Expanded(child: chart),
-                    Expanded(child: chart),
-                    Expanded(child: chart),
-                  ],
-                ),
-              );*/
             } else {
               return Container();
             }
@@ -175,7 +130,7 @@ class CountryReportPage extends StatelessWidget {
             TileLayerOptions(
               urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
               subdomains: ['a', 'b', 'c'],
-              tileProvider: CachedNetworkTileProvider(),
+              tileProvider: NonCachingNetworkTileProvider(),
             ),
             new MarkerLayerOptions(
               markers: [
@@ -195,58 +150,4 @@ class CountryReportPage extends StatelessWidget {
         ),
       );
 //endregion
-}
-
-// Chart
-class TimeSeriesRangeAnnotationChart extends StatelessWidget {
-  final List<charts.Series> seriesList;
-  final bool animate;
-
-  TimeSeriesRangeAnnotationChart(this.seriesList, {this.animate});
-
-  /// Creates a [TimeSeriesChart] with sample data and no transition.
-  factory TimeSeriesRangeAnnotationChart.withSampleData() {
-    return new TimeSeriesRangeAnnotationChart(
-      _createSampleData(),
-      // Disable animations for image tests.
-      animate: false,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return new charts.TimeSeriesChart(seriesList, animate: animate, behaviors: [
-      new charts.RangeAnnotation([
-        new charts.RangeAnnotationSegment(new DateTime(2017, 10, 4),
-            new DateTime(2017, 10, 15), charts.RangeAnnotationAxisType.domain),
-      ]),
-    ]);
-  }
-
-  /// Create one series with sample hard coded data.
-  static List<charts.Series<TimeSeriesSales, DateTime>> _createSampleData() {
-    final data = [
-      new TimeSeriesSales(new DateTime(2017, 9, 19), 5),
-      new TimeSeriesSales(new DateTime(2017, 9, 26), 25),
-      new TimeSeriesSales(new DateTime(2017, 10, 3), 100),
-      new TimeSeriesSales(new DateTime(2017, 10, 10), 75),
-    ];
-
-    return [
-      new charts.Series<TimeSeriesSales, DateTime>(
-        id: 'Sales',
-        domainFn: (TimeSeriesSales sales, _) => sales.time,
-        measureFn: (TimeSeriesSales sales, _) => sales.sales,
-        data: data,
-      )
-    ];
-  }
-}
-
-/// Sample time series data type.
-class TimeSeriesSales {
-  final DateTime time;
-  final int sales;
-
-  TimeSeriesSales(this.time, this.sales);
 }
