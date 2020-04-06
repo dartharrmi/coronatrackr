@@ -16,6 +16,7 @@ class CountryChartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Container(),
         title: Center(
           child: Title(
             color: Colors.white,
@@ -47,6 +48,15 @@ class CountryChartPage extends StatelessWidget {
         ),
       ),
       backgroundColor: Color(0xff8585a3),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Color(0xff474775),
+        elevation: 5.0,
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: Icon(Icons.arrow_back),
+      ),
     );
   }
 
