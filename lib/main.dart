@@ -98,9 +98,24 @@ class HomePage extends StatelessWidget {
           _openCountryPickerDialog(context, selectedCountryProvider);
         },
       ),
-      body: _getCurrentPage(
-        context: context,
-        notifier: selectedCountryProvider,
+      body: IndexedStack(
+        children: <Widget>[
+          Consumer<CountryNotifier>(builder: (context, notifier, child) {
+            return BlocProvider(
+              create: (context) => CountryDataBloc(
+                countryDataRepository: CountryDataRepository(),
+              ),
+              child: CountryReportPage(
+                notifier.selectedCountryCode ?? notifier.defaultCountry,
+              ),
+            );
+          }),
+          Container(
+            child: Center(
+              child: Text('This page $navigationProvider.currentIndex'),
+            ),
+          )
+        ],
         index: navigationProvider.currentIndex,
       ),
       bottomNavigationBar: NotchedNavigationBar(
