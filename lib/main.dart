@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:country_pickers/country.dart';
 import 'package:country_pickers/country_picker_dialog.dart';
 import 'package:country_pickers/utils/utils.dart';
@@ -43,11 +45,6 @@ class MyApp extends StatelessWidget {
         child: HomePage(title: 'Crownapp'),
       ),
     );
-    /*ChangeNotifierProvider<NavigationModel>(
-        create: (_) => NavigationModel(),
-        child: HomePage(title: 'Crownapp'),
-      ),
-    );*/
   }
 
   MaterialColor _createMaterialColor(Color color) {
@@ -95,6 +92,7 @@ class HomePage extends StatelessWidget {
       backgroundColor: Color(0xff8585a3),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
+        elevation: 5.0,
         onPressed: () {
           _openCountryPickerDialog(context, selectedCountryProvider);
         },

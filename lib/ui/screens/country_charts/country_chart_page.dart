@@ -1,6 +1,11 @@
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:crownapp/model/notifier/stat_notifier.dart';
 import 'package:crownapp/model/response/country_data.dart';
+import 'package:crownapp/utils/pair.dart';
+import 'package:crownapp/utils/text_style.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class CountryChartPage extends StatelessWidget {
   final List<CountryData> countryData;
@@ -10,7 +15,6 @@ class CountryChartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Center(
           child: Title(
@@ -20,25 +24,22 @@ class CountryChartPage extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.only(top: 48, bottom: 12),
+        padding: EdgeInsets.only(bottom: 12),
         scrollDirection: Axis.vertical,
         child: Column(
           children: <Widget>[
             SizedBox(
-              height: 32.5,
-            ),
-            SizedBox(
-              height: 500,
+              height: 550,
               child: _getReport(countryData[0].details,
                   id: countryData[0].details[0].status),
             ),
             SizedBox(
-              height: 500,
+              height: 550,
               child: _getReport(countryData[1].details,
                   id: countryData[1].details[0].status),
             ),
             SizedBox(
-              height: 500,
+              height: 550,
               child: _getReport(countryData[2].details,
                   id: countryData[2].details[0].status),
             ),
@@ -65,17 +66,64 @@ class CountryChartPage extends StatelessWidget {
       )
     ];
 
-    final countryCardContainer = Container(
-      child: _TimeSeriesRangeAnnotationChart(
-        series,
-        data[0].date,
-        data[data.length - 1].date,
-        data[0].status,
-        "Tiempo",
-        "Muertes",
-        animate: true,
+    return ChangeNotifierProvider(
+      create: (_) => StatNotifier(),
+      child: _ChartCard(
+          series, data[0].date, data[data.length - 1].date, data[0].status),
+    );
+  }
+}
+
+// Card
+class _ChartCard extends StatelessWidget {
+  final List<charts.Series> seriesList;
+  final DateTime startDate;
+  final DateTime endDate;
+  final String chartTitle;
+
+  _ChartCard(this.seriesList, this.startDate, this.endDate, this.chartTitle);
+
+  @override
+  Widget build(BuildContext context) {
+    final entryDetail = Consumer<StatNotifier>(
+      builder: (context, notifier, child) {
+        if (notifier.selectedDate != null) {
+          return Padding(
+            padding: EdgeInsets.only(left: 12.0, bottom: 5.0),
+            child: Row(
+              children: <Widget>[
+                Text(
+                  'Cases on ${DateFormat("dd-MM-yyyy").format(notifier.selectedDate.item1)}: ${notifier.selectedDate.item2}',
+                  textAlign: TextAlign.center,
+                  style: Style.commonTextStyle,
+                ),
+              ],
+            ),
+          );
+        } else {
+          return Container();
+        }
+      },
+    );
+
+    return Container(
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          Expanded(
+            child: _TimeSeriesRangeAnnotationChart(
+              seriesList,
+              startDate,
+              endDate,
+              chartTitle,
+              "Tiempo",
+              "Muertes",
+              animate: true,
+            ),
+          ),
+          entryDetail
+        ],
       ),
-      height: 165.0,
       decoration: BoxDecoration(
         color: const Color(0xFF333366),
         shape: BoxShape.rectangle,
@@ -90,33 +138,7 @@ class CountryChartPage extends StatelessWidget {
           )
         ],
       ),
-    );
-
-    final chart = Container(
-        height: 165.0,
-        constraints: BoxConstraints.expand(),
-        margin: EdgeInsets.only(top: 16, left: 10, right: 10),
-        child: countryCardContainer);
-
-    /*final entryDetail = Row(
-      children: <Widget>[
-        Text(
-          'Cases on: ',
-          textAlign: TextAlign.center,
-          style: Style.commonTextStyle,
-        ),
-      ],
-    )*/
-
-    return Container(
-      constraints: BoxConstraints.expand(),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Expanded(child: chart),
-          //entryDetail
-        ],
-      ),
+      margin: EdgeInsets.only(top: 16, left: 10, right: 10),
     );
   }
 }
@@ -137,6 +159,8 @@ class _TimeSeriesRangeAnnotationChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final statSelected = Provider.of<StatNotifier>(context);
+
     return charts.TimeSeriesChart(
       seriesList,
       animate: animate,
@@ -184,28 +208,19 @@ class _TimeSeriesRangeAnnotationChart extends StatelessWidget {
       selectionModels: [
         charts.SelectionModelConfig(
           type: charts.SelectionModelType.info,
-          updatedListener: _onSelection,
+          updatedListener: (selectionModel) =>
+              _onSelection(selectionModel, statSelected),
         )
       ],
     );
   }
 
-  _onSelection(charts.SelectionModel selectionModel) {
+  _onSelection(charts.SelectionModel selectionModel, StatNotifier notifier) {
     final selectedDatum = selectionModel.selectedDatum;
 
-    DateTime time;
-    final measures = <String, num>{};
-
-    // We get the model that updated with a list of [SeriesDatum] which is
-    // simply a pair of series & datum.
-    //
-    // Walk the selection updating the measures map, storing off the sales and
-    // series name for each selection point.
     if (selectedDatum.isNotEmpty) {
-      time = selectedDatum.first.datum.time;
-      selectedDatum.forEach((charts.SeriesDatum datumPair) {
-        measures[datumPair.series.displayName] = datumPair.datum.sales;
-      });
+      notifier.selectedDate =
+          Pair(selectedDatum.first.datum.time, selectedDatum.first.datum.cases);
     }
   }
 }
