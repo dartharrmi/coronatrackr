@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:country_pickers/country.dart';
 import 'package:country_pickers/country_picker_dialog.dart';
 import 'package:country_pickers/utils/utils.dart';
@@ -92,11 +90,13 @@ class HomePage extends StatelessWidget {
       backgroundColor: Color(0xff8585a3),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.search),
+        backgroundColor: Color(0xff474775),
         elevation: 5.0,
+        heroTag: 'fab',
         onPressed: () {
           _openCountryPickerDialog(context, selectedCountryProvider);
         },
-        child: Icon(Icons.search),
       ),
       body: _getCurrentPage(
         context: context,

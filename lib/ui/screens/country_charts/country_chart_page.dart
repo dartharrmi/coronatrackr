@@ -50,12 +50,13 @@ class CountryChartPage extends StatelessWidget {
       backgroundColor: Color(0xff8585a3),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.arrow_back),
         backgroundColor: Color(0xff474775),
         elevation: 5.0,
+        heroTag: 'fab',
         onPressed: () {
           Navigator.pop(context);
         },
-        child: Icon(Icons.arrow_back),
       ),
     );
   }
