@@ -1,8 +1,9 @@
 import 'package:country_pickers/country_pickers.dart';
 import 'package:crownapp/model/models.dart';
-import 'package:crownapp/utils/text_style.dart';
+import 'package:crownapp/ui/screens/country_charts/country_chart_page.dart';
 import 'package:crownapp/utils/country_utils.dart';
 import 'package:crownapp/utils/crown_app_icons.dart';
+import 'package:crownapp/utils/text_style.dart';
 import 'package:flutter/material.dart';
 
 class VirusDetails extends StatelessWidget {
@@ -28,14 +29,14 @@ class VirusDetails extends StatelessWidget {
     final latestRecoveredReport = countryData[2].details[recoveredConfirmed];
 
     // Country Details
-    final virusDetails = new Container(
-      margin: new EdgeInsets.fromLTRB(
+    final virusDetails = Container(
+      margin: EdgeInsets.fromLTRB(
         30.0,
         16.0,
         16.0,
         7.5,
       ),
-      constraints: new BoxConstraints.expand(),
+      constraints: BoxConstraints.expand(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -75,7 +76,16 @@ class VirusDetails extends StatelessWidget {
                 style: Style.hyperlink,
               ),
             ),
-            onTap: () => {},
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CountryChartPage(
+                    countryData: countryData,
+                  ),
+                ),
+              )
+            },
           )
         ],
       ),
@@ -98,15 +108,15 @@ class VirusDetails extends StatelessWidget {
 
   Widget _statDetail({String value, IconData image}) => Column(
         children: <Widget>[
-          new Icon(
+          Icon(
             image,
             size: 36.0,
             color: Colors.white,
           ),
-          new SizedBox(
+          SizedBox(
             height: 3.0,
           ),
-          new Text(
+          Text(
             value,
             textAlign: TextAlign.center,
             style: Style.commonTextStyle,
@@ -117,7 +127,7 @@ class VirusDetails extends StatelessWidget {
   Widget _getCardDecoration(Widget child) => Container(
         constraints: BoxConstraints.expand(),
         child: child,
-        margin: new EdgeInsets.only(
+        margin: EdgeInsets.only(
           left: 47.5,
         ),
         decoration: BoxDecoration(
