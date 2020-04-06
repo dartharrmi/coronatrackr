@@ -2,7 +2,9 @@ class CountryData {
   String name;
   List<CountryDetails> details;
 
-  CountryData({this.name, this.details});
+  CountryData({this.name, this.details}) {
+    details.removeWhere((element) => element.cases == 0);
+  }
 }
 
 class CountryDetails {
@@ -25,8 +27,8 @@ class CountryDetails {
   factory CountryDetails.fromJson(dynamic json) {
     return CountryDetails(
         province: json['Province'],
-        latitude: json['Lat'].toDouble(),
-        longitude: json['Lon'].toDouble(),
+        latitude: double.parse(json['Lat'].toString()),
+        longitude: double.parse(json['Lon'].toString()),
         date: DateTime.parse(json['Date']),
         cases: json['Cases'],
         status: json['Status']);
