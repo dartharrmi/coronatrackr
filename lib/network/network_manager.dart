@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:crownapp/model/response/country_data.dart';
+import 'package:crownapp/model/response/covid_country.dart';
 import 'package:http/http.dart' as http;
 import 'package:sprintf/sprintf.dart';
 
@@ -10,10 +11,35 @@ class NetworkManager {
   final _getConfirmedByCountry = "country/%s/status/confirmed";
   final _getDeathsByCountry = "country/%s/status/deaths";
   final _getRecoveredByCountry = "country/%s/status/recovered";
+  final _getAffectedCountries = "countries";
+
+  Future<List<CovidCountry>> getAffectedCountries() async {
+    print('Looking affected countries');
+    var response = await _client.get('$_baseUrl$_getAffectedCountries');
+
+    try {
+      if (response.statusCode == 200) {
+        print('Countries retrieved successfuly');
+        print('Parsing response');
+
+        var rawData = json.decode(response.body);
+        print('Response:\n $rawData');
+        final listOfCountries = List<CovidCountry>.from(
+            rawData.map((item) => CovidCountry.fromMap(item)));
+        print('Parsing data finished');
+
+        return listOfCountries;
+      } else {
+        throw new Exception('Error fetching data :(');
+      }
+    } catch (e) {
+      print(e);
+      return List<CovidCountry>();
+    }
+  }
 
   Future<CountryData> getConfirmedByCountry(String countryName) async {
     print('Looking confirmed for $countryName');
-
     var responseConfirmed = await _client
         .get(sprintf('$_baseUrl$_getConfirmedByCountry', [countryName]));
 
