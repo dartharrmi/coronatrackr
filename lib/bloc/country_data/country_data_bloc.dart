@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CountryDataBloc extends Bloc<CountryDataEvent, CountryDataState> {
-  final CountryDataRepository countryDataRepository;
+  final DataRepository countryDataRepository;
 
   CountryDataBloc({@required this.countryDataRepository})
       : assert(countryDataRepository != null);
