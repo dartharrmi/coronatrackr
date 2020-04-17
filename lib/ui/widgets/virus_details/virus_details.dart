@@ -5,6 +5,7 @@ import 'package:crownapp/utils/country_utils.dart';
 import 'package:crownapp/utils/crown_app_icons.dart';
 import 'package:crownapp/utils/text_style.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class VirusDetails extends StatelessWidget {
   final String _country_icons_package = "country_pickers";
@@ -62,7 +63,13 @@ class VirusDetails extends StatelessWidget {
               ),
             ],
           ),
-          Spacer(),
+          Padding(
+            padding: EdgeInsets.only(left: 9.0),
+            child: Text(
+              'Last update: ${DateFormat("dd-MM-yyyy").format(countryData.lastUpdate)}',
+              style: Style.commonTextStyle,
+            ),
+          ),
           GestureDetector(
             child: Padding(
               padding: EdgeInsets.only(left: 9.0),
@@ -87,7 +94,7 @@ class VirusDetails extends StatelessWidget {
     );
 
     return Container(
-      height: 180.0,
+      height: 300.0,
       margin: const EdgeInsets.symmetric(
         vertical: 16.0,
         horizontal: 24.0,
