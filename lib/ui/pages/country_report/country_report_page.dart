@@ -1,5 +1,6 @@
 import 'package:crownapp/bloc/blocs.dart';
 import 'package:crownapp/ui/widgets/virus_details/virus_details.dart';
+import 'package:crownapp/utils/country_utils.dart';
 import 'package:crownapp/utils/text_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class CountryReportPage extends StatelessWidget {
         ),
         defaultPanelState: PanelState.OPEN,
         minHeight: 90.0,
-        maxHeight: 200.0,
+        maxHeight: 245.0,
         parallaxEnabled: true,
         panel: BlocBuilder<CountryDataBloc, CountryDataState>(
           builder: (context, state) {
@@ -54,21 +55,21 @@ class CountryReportPage extends StatelessWidget {
               return _getMapProgressBar();
             }
             if (state is CountryDataAvailable) {
-              /*final lengthConfirmed = state.countryData[0].details.length - 1;
-              final latestConfirmedReport =
-                  state.countryData[0].details[lengthConfirmed];
+              final latestConfirmedReport = state.countryData.details[Status
+                  .CONFIRMED];
 
               final lat = latestConfirmedReport.latitude;
-              final lon = latestConfirmedReport.longitude;*/
+              final lon = latestConfirmedReport.longitude;
 
-              return _getMap(0, 0);
+              return _getMap(lat, lon);
             }
             return Container();
           },
         ));
   }
 
-  Widget _getError() => Center(
+  Widget _getError() =>
+      Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -89,7 +90,8 @@ class CountryReportPage extends StatelessWidget {
       );
 
 //region Panel
-  Widget _getPanelProgressBar() => Center(
+  Widget _getPanelProgressBar() =>
+      Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -112,14 +114,16 @@ class CountryReportPage extends StatelessWidget {
 //endregion
 
 //region Map
-  Widget _getMapProgressBar() => Container(
+  Widget _getMapProgressBar() =>
+      Container(
         constraints: BoxConstraints.expand(),
         child: Center(
           child: CircularProgressIndicator(),
         ),
       );
 
-  Widget _getMap(double lat, double lon) => Container(
+  Widget _getMap(double lat, double lon) =>
+      Container(
         constraints: BoxConstraints.expand(),
         child: FlutterMap(
           options: MapOptions(
@@ -138,11 +142,12 @@ class CountryReportPage extends StatelessWidget {
                   width: 80.0,
                   height: 80.0,
                   point: LatLng(lat, lon),
-                  builder: (ctx) => Container(
-                    child: FlutterLogo(
-                      size: 5.0,
-                    ),
-                  ),
+                  builder: (ctx) =>
+                      Container(
+                        child: FlutterLogo(
+                          size: 5.0,
+                        ),
+                      ),
                 ),
               ],
             ),
