@@ -29,7 +29,7 @@ class NetworkManager {
         var rawData = json.decode(response.body);
         print('Response:\n $rawData');
         final listOfCountries = List<CovidCountry>.from(
-            rawData.map((item) => CovidCountry.fromJson(item)));
+            rawData.map((item) => CovidCountry.fromMap(item)));
         print('Parsing data finished');
 
         return listOfCountries;

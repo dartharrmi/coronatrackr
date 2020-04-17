@@ -42,7 +42,7 @@ class SplashPage extends StatelessWidget {
                                 create: (_) => CountryNotifier(),
                               )
                             ],
-                            child: HomePage(countries: state.countryList),
+                            child: HomePage(title: 'Crownapp'),
                           ),
                         ),
                       );
