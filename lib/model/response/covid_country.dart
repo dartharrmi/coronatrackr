@@ -1,20 +1,13 @@
-import 'package:country_pickers/country.dart';
-
-class CovidCountry extends Country {
+class CovidCountry {
+  String country;
   String slug;
+  String iso2;
 
-  CovidCountry(isoCode, iso3Code, phoneCode, name, this.slug)
-      : super(
-            isoCode: isoCode,
-            iso3Code: iso3Code,
-            phoneCode: phoneCode,
-            name: name);
+  CovidCountry(this.country, this.slug, this.iso2);
 
-  factory CovidCountry.fromMap(Map<String, String> map) => CovidCountry(
-        map['name'],
-        map['isoCode'],
-        map['iso3Code'],
-        map['phoneCode'],
-        map['slug'],
+  factory CovidCountry.fromJson(dynamic map) => CovidCountry(
+        map['Country'],
+        map['Slug'],
+        map['ISO2'],
       );
 }

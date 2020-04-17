@@ -4,6 +4,7 @@ import 'package:country_pickers/utils/utils.dart';
 import 'package:crownapp/bloc/country_data/country_data_bloc.dart';
 import 'package:crownapp/model/notifier/country_notifier.dart';
 import 'package:crownapp/model/notifier/navigation_model.dart';
+import 'package:crownapp/model/response/covid_country.dart';
 import 'package:crownapp/repository/country_data_repository.dart';
 import 'package:crownapp/ui/pages/country_report/country_report_page.dart';
 import 'package:crownapp/ui/widgets/bottom_bar/notched_navigation_bar.dart';
@@ -12,9 +13,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
-  final String title;
+  final List<CovidCountry> countries;
 
-  const HomePage({Key key, this.title}) : super(key: key);
+  const HomePage({Key key, this.countries}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,7 @@ class HomePage extends StatelessWidget {
         title: Center(
           child: Title(
             color: Colors.white,
-            child: Text(this.title),
+            child: Text('Coronatrackr'),
           ),
         ),
       ),
@@ -75,33 +76,6 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _getCurrentPage(
-      {BuildContext context, CountryNotifier notifier, int index}) {
-    switch (index) {
-      case 0:
-        {
-          return Consumer<CountryNotifier>(builder: (context, notifier, child) {
-            return BlocProvider(
-              create: (context) => CountryDataBloc(
-                countryDataRepository: DataRepository(),
-              ),
-              child: CountryReportPage(
-                notifier.selectedCountryCode ?? notifier.defaultCountry,
-              ),
-            );
-          });
-        }
-      default:
-        {
-          return Container(
-            child: Center(
-              child: Text('This page $index'),
-            ),
-          );
-        }
-    }
-  }
-
   void _openCountryPickerDialog(
           BuildContext context, CountryNotifier notified) =>
       showDialog(
@@ -115,7 +89,10 @@ class HomePage extends StatelessWidget {
             isSearchable: true,
             title: Text('Choose your country'),
             onValuePicked: (Country country) {
-              notified.selectedCountryCode = country.name;
+              notified.selectedCountryCode = this
+                  .countries
+                  .firstWhere((element) => element.iso2 == country.isoCode)
+                  .slug;
             },
             itemBuilder: _buildDialogItem,
           ),
