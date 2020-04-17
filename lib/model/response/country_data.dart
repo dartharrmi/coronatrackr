@@ -1,9 +1,14 @@
-class CountryData {
-  String name;
-  List<CountryDetails> details;
+import 'dart:collection';
 
-  CountryData({this.name, this.details}) {
-    details.removeWhere((element) => element.cases == 0);
+import 'package:crownapp/utils/country_utils.dart';
+
+class CountryData {
+  String countryName;
+  DateTime lastUpdate;
+  HashMap<Status, CountryDetails> details;
+
+  CountryData({this.countryName, this.lastUpdate, this.details}) {
+    // details.removeWhere((element) => element.cases == 0);
   }
 }
 

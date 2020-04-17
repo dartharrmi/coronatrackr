@@ -1,6 +1,7 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:crownapp/model/notifier/stat_notifier.dart';
 import 'package:crownapp/model/response/country_data.dart';
+import 'package:crownapp/utils/country_utils.dart';
 import 'package:crownapp/utils/pair.dart';
 import 'package:crownapp/utils/text_style.dart';
 import 'package:flutter/material.dart';
@@ -8,13 +9,13 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class CountryChartPage extends StatelessWidget {
-  final List<CountryData> countryData;
+  final String countrySlug;
 
-  CountryChartPage({this.countryData});
+  CountryChartPage({this.countrySlug});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Container(); /*Scaffold(
       appBar: AppBar(
         leading: Container(),
         title: Center(
@@ -32,7 +33,7 @@ class CountryChartPage extends StatelessWidget {
             SizedBox(
               height: 550,
               child: _getReport(countryData[0].details,
-                  id: countryData[0].details[0].status),
+                  id: countryData[Status.CONFIRMED].details[0].status),
             ),
             SizedBox(
               height: 550,
@@ -58,7 +59,7 @@ class CountryChartPage extends StatelessWidget {
           Navigator.pop(context);
         },
       ),
-    );
+    );*/
   }
 
   Widget _getReport(List<CountryDetails> data, {String id}) {

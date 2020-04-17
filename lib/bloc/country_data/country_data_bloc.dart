@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:crownapp/bloc/country_data/country_data_event.dart';
 import 'package:crownapp/bloc/country_data/country_data_state.dart';
 import 'package:crownapp/repository/country_data_repository.dart';
@@ -21,23 +19,11 @@ class CountryDataBloc extends Bloc<CountryDataEvent, CountryDataState> {
 
     try {
       final countryData =
-          await countryDataRepository.fetchCountryData(event.countryName);
+          await countryDataRepository.getCountryData(event.countryName);
       yield CountryDataAvailable(countryData: countryData);
     } catch (e) {
       print(e);
       yield CountryDataError();
     }
-  }
-
-  @override
-  void onTransition(Transition<CountryDataEvent, CountryDataState> transition) {
-    // TODO: implement onTransition
-    super.onTransition(transition);
-  }
-
-  @override
-  void onEvent(CountryDataEvent event) {
-    // TODO: implement onEvent
-    super.onEvent(event);
   }
 }

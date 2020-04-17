@@ -54,14 +54,14 @@ class CountryReportPage extends StatelessWidget {
               return _getMapProgressBar();
             }
             if (state is CountryDataAvailable) {
-              final lengthConfirmed = state.countryData[0].details.length - 1;
+              /*final lengthConfirmed = state.countryData[0].details.length - 1;
               final latestConfirmedReport =
                   state.countryData[0].details[lengthConfirmed];
 
               final lat = latestConfirmedReport.latitude;
-              final lon = latestConfirmedReport.longitude;
+              final lon = latestConfirmedReport.longitude;*/
 
-              return _getMap(lat, lon);
+              return _getMap(0, 0);
             }
             return Container();
           },

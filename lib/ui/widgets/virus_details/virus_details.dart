@@ -8,25 +8,20 @@ import 'package:flutter/material.dart';
 
 class VirusDetails extends StatelessWidget {
   final String _country_icons_package = "country_pickers";
-  final List<CountryData> countryData;
+  final CountryData countryData;
 
   VirusDetails({this.countryData});
 
   @override
   Widget build(BuildContext context) {
-    final country = CountryUtils.getCountryByName(countryData[0].name);
-
     // Confirmed =|
-    final lengthConfirmed = countryData[0].details.length - 1;
-    final latestConfirmedReport = countryData[0].details[lengthConfirmed];
+    final latestConfirmedReport = countryData.details[Status.CONFIRMED];
 
     // Deaths =(
-    final deathsConfirmed = countryData[1].details.length - 1;
-    final latestDeathReport = countryData[1].details[deathsConfirmed];
+    final latestDeathReport = countryData.details[Status.DEATHS];
 
     // Recovered =)
-    final recoveredConfirmed = countryData[2].details.length - 1;
-    final latestRecoveredReport = countryData[2].details[recoveredConfirmed];
+    final latestRecoveredReport = countryData.details[Status.RECOVERED];
 
     // Country Details
     final virusDetails = Container(
@@ -44,7 +39,7 @@ class VirusDetails extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(left: 26.0),
             child: Text(
-              country.name,
+              countryData.countryName,
               style: Style.strongTitleTextStyle,
             ),
           ),
@@ -81,7 +76,7 @@ class VirusDetails extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => CountryChartPage(
-                    countryData: countryData,
+                    countrySlug: countryData.countryName,
                   ),
                 ),
               )
@@ -100,7 +95,7 @@ class VirusDetails extends StatelessWidget {
       child: Stack(
         children: <Widget>[
           _getCardDecoration(virusDetails),
-          _getCountryIcon(country.isoCode),
+          _getCountryIcon('CO'),
         ],
       ),
     );
