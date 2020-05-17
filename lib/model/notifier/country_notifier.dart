@@ -1,15 +1,16 @@
+import 'package:country_pickers/country.dart';
 import 'package:country_pickers/country_pickers.dart';
 import 'package:flutter/material.dart';
 
 class CountryNotifier with ChangeNotifier {
-  String _selectedCountryCode;
+  Country _selectedCountry;
 
-  get selectedCountryCode => _selectedCountryCode;
+  get selectedCountry => _selectedCountry;
 
-  get defaultCountry => CountryPickerUtils.getCountryByIsoCode('CO').name;
+  get defaultCountry => CountryPickerUtils.getCountryByIsoCode('CO');
 
-  set selectedCountryCode(String newCountryCode) {
-    _selectedCountryCode = newCountryCode;
+  set selectedCountry(Country newCountry) {
+    _selectedCountry = newCountry;
     notifyListeners();
   }
 }

@@ -129,7 +129,6 @@ class NetworkManager {
   // @formatter:off
   Future<CountryData> getCountryData(String countrySlug) async {
     SharedPreferences prefs = await _prefs;
-    String countryName;
     CountryData countryData = CountryData();
     HashMap<Status, CountryDetails> details = new HashMap<Status, CountryDetails>();
 
@@ -152,6 +151,7 @@ class NetworkManager {
         print('Response received successfuly');
         print('Parsing data');
         var rawData = json.decode(responseConfirmed.body);
+        print('Response: $rawData');
         print('Caching confirmed to local storage.');
         latestConfirmed = CountryDetails.fromJson((rawData as List).last);
         details[Status.CONFIRMED] = latestConfirmed;
