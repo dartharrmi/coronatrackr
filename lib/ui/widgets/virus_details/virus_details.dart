@@ -1,17 +1,21 @@
 import 'package:country_pickers/country_pickers.dart';
+import 'package:crownapp/bloc/chart/country_chart_bloc.dart';
 import 'package:crownapp/model/models.dart';
+import 'package:crownapp/repository/country_data_repository.dart';
 import 'package:crownapp/ui/screens/country_charts/country_chart_page.dart';
 import 'package:crownapp/utils/country_utils.dart';
 import 'package:crownapp/utils/crown_app_icons.dart';
 import 'package:crownapp/utils/text_style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class VirusDetails extends StatelessWidget {
   final String _country_icons_package = "country_pickers";
   final CountryData countryData;
+  final String countryCode;
 
-  VirusDetails({this.countryData});
+  VirusDetails({this.countryData, this.countryCode});
 
   @override
   Widget build(BuildContext context) {
@@ -64,15 +68,16 @@ class VirusDetails extends StatelessWidget {
             ],
           ),
           Padding(
-            padding: EdgeInsets.only(left: 9.0),
+            padding: EdgeInsets.only(left: 1.0),
             child: Text(
               'Last update: ${DateFormat("dd-MM-yyyy").format(countryData.lastUpdate)}',
               style: Style.commonTextStyle,
             ),
           ),
+          Spacer(),
           GestureDetector(
             child: Padding(
-              padding: EdgeInsets.only(left: 9.0),
+              padding: EdgeInsets.only(left: 1.0),
               child: Text(
                 'View more details',
                 style: Style.hyperlink,
@@ -82,8 +87,13 @@ class VirusDetails extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CountryChartPage(
-                    countrySlug: countryData.countryName,
+                  builder: (context) => BlocProvider(
+                    create: (context) => CountryChartBloc(
+                      countryDataRepository: DataRepository(),
+                    ),
+                    child: CountryChartPage(
+                      countrySlug: countryData.countryName,
+                    ),
                   ),
                 ),
               )
@@ -102,7 +112,7 @@ class VirusDetails extends StatelessWidget {
       child: Stack(
         children: <Widget>[
           _getCardDecoration(virusDetails),
-          _getCountryIcon('CO'),
+          _getCountryIcon(countryCode),
         ],
       ),
     );

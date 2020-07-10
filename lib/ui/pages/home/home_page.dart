@@ -4,6 +4,7 @@ import 'package:country_pickers/utils/utils.dart';
 import 'package:crownapp/bloc/country_data/country_data_bloc.dart';
 import 'package:crownapp/model/notifier/country_notifier.dart';
 import 'package:crownapp/model/notifier/navigation_model.dart';
+import 'package:crownapp/model/response/covid_country.dart';
 import 'package:crownapp/repository/country_data_repository.dart';
 import 'package:crownapp/ui/pages/country_report/country_report_page.dart';
 import 'package:crownapp/ui/widgets/bottom_bar/notched_navigation_bar.dart';
@@ -13,8 +14,13 @@ import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   final String title;
+  final List<CovidCountry> confirmedCountries;
 
-  const HomePage({Key key, this.title}) : super(key: key);
+  const HomePage({
+    Key key,
+    this.title,
+    this.confirmedCountries,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +56,8 @@ class HomePage extends StatelessWidget {
                 countryDataRepository: DataRepository(),
               ),
               child: CountryReportPage(
-                notifier.selectedCountryCode ?? notifier.defaultCountry,
+                notifier.selectedCountry ??
+                    CovidCountry("", "", "", "", ""),
               ),
             );
           }),
@@ -86,7 +93,7 @@ class HomePage extends StatelessWidget {
                 countryDataRepository: DataRepository(),
               ),
               child: CountryReportPage(
-                notifier.selectedCountryCode ?? notifier.defaultCountry,
+                notifier.selectedCountry ?? notifier.defaultCountry,
               ),
             );
           });
@@ -115,7 +122,8 @@ class HomePage extends StatelessWidget {
             isSearchable: true,
             title: Text('Choose your country'),
             onValuePicked: (Country country) {
-              notified.selectedCountryCode = country.name;
+              notified.selectedCountry = confirmedCountries
+                  .firstWhere((element) => element.isoCode == country.isoCode);
             },
             itemBuilder: _buildDialogItem,
           ),
