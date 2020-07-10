@@ -10,7 +10,7 @@ class DataRepository {
   final NetworkManager _networkManager = NetworkManager();
 
   Future<List<CovidCountry>> getAffectedCountries() async {
-    return _networkManager.getAffectedCountries();
+    return _networkManager.getCountriesSlug();
   }
 
   Future<CountryData> getCountryData(String countrySlug) async =>

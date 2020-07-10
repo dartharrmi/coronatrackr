@@ -1,4 +1,7 @@
+import 'package:country_pickers/country.dart';
 import 'package:crownapp/bloc/blocs.dart';
+import 'package:crownapp/model/country_centers.dart';
+import 'package:crownapp/model/models.dart';
 import 'package:crownapp/ui/widgets/virus_details/virus_details.dart';
 import 'package:crownapp/utils/country_utils.dart';
 import 'package:crownapp/utils/text_style.dart';
@@ -10,16 +13,16 @@ import 'package:latlong/latlong.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class CountryReportPage extends StatelessWidget {
-  final String countryName;
+  final CovidCountry country;
 
   final circular = Radius.circular(15);
 
-  CountryReportPage(this.countryName);
+  CountryReportPage(this.country);
 
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<CountryDataBloc>(context)
-        .add(CountryDataEvent(countryName));
+        .add(CountryDataEvent(country.slug));
 
     return SlidingUpPanel(
         color: Color(0xFF040d3b),
@@ -40,6 +43,7 @@ class CountryReportPage extends StatelessWidget {
             } else if (state is CountryDataAvailable) {
               return VirusDetails(
                 countryData: state.countryData,
+                countryCode: country.isoCode,
               );
             } else {
               return Container();
@@ -55,21 +59,15 @@ class CountryReportPage extends StatelessWidget {
               return _getMapProgressBar();
             }
             if (state is CountryDataAvailable) {
-              final latestConfirmedReport = state.countryData.details[Status
-                  .CONFIRMED];
-
-              final lat = latestConfirmedReport.latitude;
-              final lon = latestConfirmedReport.longitude;
-
-              return _getMap(lat, lon);
+              //return _getMap(countryCenterDetails[country.isoCode]);
+              return Container();
             }
             return Container();
           },
         ));
   }
 
-  Widget _getError() =>
-      Center(
+  Widget _getError() => Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -90,8 +88,7 @@ class CountryReportPage extends StatelessWidget {
       );
 
 //region Panel
-  Widget _getPanelProgressBar() =>
-      Center(
+  Widget _getPanelProgressBar() => Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -114,20 +111,18 @@ class CountryReportPage extends StatelessWidget {
 //endregion
 
 //region Map
-  Widget _getMapProgressBar() =>
-      Container(
+  Widget _getMapProgressBar() => Container(
         constraints: BoxConstraints.expand(),
         child: Center(
           child: CircularProgressIndicator(),
         ),
       );
 
-  Widget _getMap(double lat, double lon) =>
-      Container(
+  Widget _getMap(LatLng countryCenter) => Container(
         constraints: BoxConstraints.expand(),
         child: FlutterMap(
           options: MapOptions(
-            center: LatLng(lat, lon),
+            center: countryCenter,
             zoom: 6.1,
           ),
           layers: [
@@ -141,13 +136,12 @@ class CountryReportPage extends StatelessWidget {
                 new Marker(
                   width: 80.0,
                   height: 80.0,
-                  point: LatLng(lat, lon),
-                  builder: (ctx) =>
-                      Container(
-                        child: FlutterLogo(
-                          size: 5.0,
-                        ),
-                      ),
+                  point: countryCenter,
+                  builder: (ctx) => Container(
+                    child: FlutterLogo(
+                      size: 5.0,
+                    ),
+                  ),
                 ),
               ],
             ),

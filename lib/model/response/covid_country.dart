@@ -10,11 +10,11 @@ class CovidCountry extends Country {
             phoneCode: phoneCode,
             name: name);
 
-  factory CovidCountry.fromMap(Map<String, String> map) => CovidCountry(
-        map['name'],
-        map['isoCode'],
+  factory CovidCountry.fromMap(Map<String, dynamic> map) => CovidCountry(
+        map['ISO2'],
         map['iso3Code'],
         map['phoneCode'],
-        map['slug'],
+        map['Country'],
+        map['Slug'],
       );
 }

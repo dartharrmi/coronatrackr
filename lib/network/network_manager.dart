@@ -17,7 +17,7 @@ class NetworkManager {
   final _getAffectedCountries = "countries";
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
-  Future<List<CovidCountry>> getAffectedCountries() async {
+  Future<List<CovidCountry>> getCountriesSlug() async {
     print('Looking affected countries');
     var response = await _client.get('$_baseUrl$_getAffectedCountries');
 
@@ -38,7 +38,7 @@ class NetworkManager {
       }
     } catch (e) {
       print(e);
-      return List<CovidCountry>();
+      return [];
     }
   }
 
@@ -130,7 +130,8 @@ class NetworkManager {
   Future<CountryData> getCountryData(String countrySlug) async {
     SharedPreferences prefs = await _prefs;
     CountryData countryData = CountryData();
-    HashMap<Status, CountryDetails> details = new HashMap<Status, CountryDetails>();
+    HashMap<Status, CountryDetails> details =
+        new HashMap<Status, CountryDetails>();
 
     print('Looking confirmed cases for $countrySlug');
     var responseConfirmed = await _client
@@ -156,7 +157,9 @@ class NetworkManager {
         latestConfirmed = CountryDetails.fromJson((rawData as List).last);
         details[Status.CONFIRMED] = latestConfirmed;
 
-        bool saved = await prefs.setString('${Status.getStatusName(Status.CONFIRMED, countrySlug)}', responseConfirmed.body);
+        bool saved = await prefs.setString(
+            '${Status.getStatusName(Status.CONFIRMED, countrySlug)}',
+            responseConfirmed.body);
         print('Were confirmed saved to local storage: $saved');
       }
 
@@ -169,7 +172,9 @@ class NetworkManager {
         latestDeaths = CountryDetails.fromJson((rawData as List).last);
         details[Status.DEATHS] = latestDeaths;
 
-        bool saved = await prefs.setString('${Status.getStatusName(Status.DEATHS, countrySlug)}', responseDeaths.body);
+        bool saved = await prefs.setString(
+            '${Status.getStatusName(Status.DEATHS, countrySlug)}',
+            responseDeaths.body);
         print('Were deaths saved to local storage: $saved');
       }
 
@@ -182,7 +187,9 @@ class NetworkManager {
         latestRecovered = CountryDetails.fromJson((rawData as List).last);
         details[Status.RECOVERED] = latestRecovered;
 
-        bool saved = await prefs.setString('${Status.getStatusName(Status.RECOVERED, countrySlug)}', responseRecovered.body);
+        bool saved = await prefs.setString(
+            '${Status.getStatusName(Status.RECOVERED, countrySlug)}',
+            responseRecovered.body);
         print('Were recovered saved to local storage: $saved');
       }
 
