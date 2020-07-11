@@ -10,7 +10,7 @@ class CountryDataEmpty extends CountryDataState {}
 class CountryDataLoading extends CountryDataState {}
 
 class CountryDataAvailable extends CountryDataState {
-  final CountryData countryData;
+  final List<CountryData> countryData;
 
   const CountryDataAvailable({@required this.countryData})
       : assert(countryData != null);

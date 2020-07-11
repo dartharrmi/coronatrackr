@@ -12,21 +12,18 @@ import 'package:intl/intl.dart';
 
 class VirusDetails extends StatelessWidget {
   final String _country_icons_package = "country_pickers";
-  final CountryData countryData;
+  final List<CountryData> countryData;
   final String countryCode;
 
   VirusDetails({this.countryData, this.countryCode});
 
   @override
   Widget build(BuildContext context) {
-    // Confirmed =|
-    final latestConfirmedReport = countryData.details[Status.CONFIRMED];
-
-    // Deaths =(
-    final latestDeathReport = countryData.details[Status.DEATHS];
-
-    // Recovered =)
-    final latestRecoveredReport = countryData.details[Status.RECOVERED];
+    final latestReport = countryData[countryData.length - 1];
+    final latestUpdate = latestReport.date;
+    final latestConfirmed = latestReport.confirmed;
+    final latestDeaths = latestReport.deaths;
+    final latestRecovered = latestReport.recovered;
 
     // Country Details
     final virusDetails = Container(
@@ -44,7 +41,7 @@ class VirusDetails extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(left: 26.0),
             child: Text(
-              countryData.countryName,
+              latestReport.country,
               style: Style.strongTitleTextStyle,
             ),
           ),
@@ -53,15 +50,15 @@ class VirusDetails extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               _statDetail(
-                value: '${latestConfirmedReport.cases} \nConfirmed',
+                value: '$latestConfirmed \nConfirmed',
                 image: CrownApp.iconfinder_emoji_emoticon_35_3638429,
               ),
               _statDetail(
-                value: '${latestDeathReport.cases} \nDeaths',
+                value: '$latestDeaths \nDeaths',
                 image: CrownApp.iconfinder_disease_29_5766041,
               ),
               _statDetail(
-                value: '${latestRecoveredReport.cases} \nRecovered',
+                value: '$latestRecovered \nRecovered',
                 image: CrownApp
                     .iconfinder_recovered_immune_strong_healthy_revive_5969421,
               ),
@@ -70,7 +67,7 @@ class VirusDetails extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(left: 1.0),
             child: Text(
-              'Last update: ${DateFormat("dd-MM-yyyy").format(countryData.lastUpdate)}',
+              'Last update: ${DateFormat("dd-MM-yyyy").format(latestUpdate)}',
               style: Style.commonTextStyle,
             ),
           ),
@@ -92,7 +89,7 @@ class VirusDetails extends StatelessWidget {
                       countryDataRepository: DataRepository(),
                     ),
                     child: CountryChartPage(
-                      countrySlug: countryData.countryName,
+                      countrySlug: latestReport.country,
                     ),
                   ),
                 ),

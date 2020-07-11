@@ -10,7 +10,7 @@ class CountryChartEmpty extends CountryChartState {}
 class CountryChartLoading extends CountryChartState {}
 
 class CountryChartAvailable extends CountryChartState {
-  final List<CountryDetails> countryChart;
+  final List<CountryData> countryChart;
 
   const CountryChartAvailable({@required this.countryChart})
       : assert(countryChart != null);

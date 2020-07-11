@@ -13,20 +13,20 @@ class DataRepository {
     return _networkManager.getCountriesSlug();
   }
 
-  Future<CountryData> getCountryData(String countrySlug) async =>
+  Future<List<CountryData>> getCountryData(String countrySlug) async =>
       _networkManager.getCountryData(countrySlug);
 
-  Future<List<CountryDetails>> getChartDetails(
+  Future<List<CountryData>> getChartDetails(
       String countrySlug, Status status) async {
-    List<CountryDetails> details;
+    List<CountryData> details;
     final prefs = await SharedPreferences.getInstance();
     final savedJson =
         prefs.getString(Status.getStatusName(Status.CONFIRMED, countrySlug));
 
     if (savedJson.isNotEmpty) {
-      details = List<CountryDetails>.from(
-          json.decode(savedJson).map((item) => CountryDetails.fromJson(item)));
-      details.removeWhere((element) => element.cases == 0);
+      details = List<CountryData>.from(
+          json.decode(savedJson).map((item) => CountryData.fromJson(item)));
+      details.removeWhere((element) => element.confirmed == 0);
     }
 
     return details;
