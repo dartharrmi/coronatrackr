@@ -1,11 +1,8 @@
-import 'package:country_pickers/country.dart';
 import 'package:crownapp/bloc/blocs.dart';
 import 'package:crownapp/model/country_centers.dart';
 import 'package:crownapp/model/models.dart';
 import 'package:crownapp/ui/widgets/virus_details/virus_details.dart';
-import 'package:crownapp/utils/country_utils.dart';
 import 'package:crownapp/utils/text_style.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -59,8 +56,9 @@ class CountryReportPage extends StatelessWidget {
               return _getMapProgressBar();
             }
             if (state is CountryDataAvailable) {
-              //return _getMap(countryCenterDetails[country.isoCode]);
-              return Container();
+              var countryCenter = countryCenterDetails[country.isoCode];
+              return _getMap(LatLng(countryCenter.item1, countryCenter.item2));
+              //return Container();
             }
             return Container();
           },
