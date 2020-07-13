@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Style {
   static final baseTextStyle = const TextStyle(fontFamily: 'Poppins');
@@ -25,4 +26,6 @@ class Style {
     fontSize: 15.0,
     decoration: TextDecoration.underline,
   );
+
+  static final numberFormatter = NumberFormat("###,###,###", "en_US");
 }

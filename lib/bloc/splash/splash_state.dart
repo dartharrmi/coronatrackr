@@ -1,4 +1,3 @@
-import 'package:crownapp/model/response/country_data.dart';
 import 'package:crownapp/model/response/covid_country.dart';
 import 'package:flutter/foundation.dart';
 

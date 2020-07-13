@@ -1,4 +1,3 @@
-import 'package:country_pickers/country.dart';
 import 'package:country_pickers/country_pickers.dart';
 import 'package:crownapp/model/response/covid_country.dart';
 import 'package:flutter/material.dart';

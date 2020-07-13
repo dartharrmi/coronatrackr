@@ -3,7 +3,6 @@ import 'package:crownapp/bloc/chart/country_chart_bloc.dart';
 import 'package:crownapp/model/models.dart';
 import 'package:crownapp/repository/country_data_repository.dart';
 import 'package:crownapp/ui/screens/country_charts/country_chart_page.dart';
-import 'package:crownapp/utils/country_utils.dart';
 import 'package:crownapp/utils/crown_app_icons.dart';
 import 'package:crownapp/utils/text_style.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +20,7 @@ class VirusDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     final latestReport = countryData[countryData.length - 1];
     final latestUpdate = latestReport.date;
+    final latestActive = latestReport.active;
     final latestConfirmed = latestReport.confirmed;
     final latestDeaths = latestReport.deaths;
     final latestRecovered = latestReport.recovered;
@@ -40,9 +40,17 @@ class VirusDetails extends StatelessWidget {
           Spacer(),
           Padding(
             padding: EdgeInsets.only(left: 26.0),
-            child: Text(
-              latestReport.country,
-              style: Style.strongTitleTextStyle,
+            child: Column(
+              children: <Widget>[
+                Text(
+                  latestReport.country,
+                  style: Style.strongTitleTextStyle,
+                ),
+                Text(
+                  'Active cases: ${Style.numberFormatter.format(latestActive)}',
+                  style: Style.commonTextStyle,
+                ),
+              ],
             ),
           ),
           Spacer(),
@@ -50,15 +58,17 @@ class VirusDetails extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               _statDetail(
-                value: '$latestConfirmed \nConfirmed',
+                value:
+                    '${Style.numberFormatter.format(latestConfirmed)} \nConfirmed',
                 image: CrownApp.iconfinder_emoji_emoticon_35_3638429,
               ),
               _statDetail(
-                value: '$latestDeaths \nDeaths',
+                value: '${Style.numberFormatter.format(latestDeaths)} \nDeaths',
                 image: CrownApp.iconfinder_disease_29_5766041,
               ),
               _statDetail(
-                value: '$latestRecovered \nRecovered',
+                value:
+                    '${Style.numberFormatter.format(latestRecovered)} \nRecovered',
                 image: CrownApp
                     .iconfinder_recovered_immune_strong_healthy_revive_5969421,
               ),
