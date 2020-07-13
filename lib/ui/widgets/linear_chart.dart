@@ -1,4 +1,3 @@
-import 'package:crownapp/model/response/country_data.dart';
 import 'package:crownapp/utils/text_style.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -122,10 +121,9 @@ class NumericLinearChart extends StatelessWidget {
 
   List<LineSeries<NumericChartData, DateTime>> getDefaultLineSeries(
       List<NumericChartData> data) {
-
     return <LineSeries<NumericChartData, DateTime>>[
       LineSeries<NumericChartData, DateTime>(
-        animationDuration: 0,
+        animationDuration: 2500,
         enableTooltip: true,
         dataSource: countryData,
         xValueMapper: (NumericChartData sales, _) => sales.x,
