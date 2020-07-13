@@ -60,17 +60,16 @@ class VirusDetails extends StatelessWidget {
               _statDetail(
                 value:
                     '${Style.numberFormatter.format(latestConfirmed)} \nConfirmed',
-                image: CrownApp.iconfinder_emoji_emoticon_35_3638429,
+                image: CrownApp.ic_font_mask,
               ),
               _statDetail(
                 value: '${Style.numberFormatter.format(latestDeaths)} \nDeaths',
-                image: CrownApp.iconfinder_disease_29_5766041,
+                image: CrownApp.ic_font_death,
               ),
               _statDetail(
                 value:
                     '${Style.numberFormatter.format(latestRecovered)} \nRecovered',
-                image: CrownApp
-                    .iconfinder_recovered_immune_strong_healthy_revive_5969421,
+                image: CrownApp.ic_font_recovered,
               ),
             ],
           ),

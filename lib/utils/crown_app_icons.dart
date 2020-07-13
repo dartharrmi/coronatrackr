@@ -19,8 +19,9 @@ class CrownApp {
   CrownApp._();
 
   static const _kFontFam = 'CrownApp';
+  static const _kFontPkg = null;
 
-  static const IconData iconfinder_emoji_emoticon_35_3638429 = IconData(0xe800, fontFamily: _kFontFam);
-  static const IconData iconfinder_recovered_immune_strong_healthy_revive_5969421 = IconData(0xe801, fontFamily: _kFontFam);
-  static const IconData iconfinder_disease_29_5766041 = IconData(0xe802, fontFamily: _kFontFam);
+  static const IconData ic_font_death = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData ic_font_mask = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData ic_font_recovered = IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }
