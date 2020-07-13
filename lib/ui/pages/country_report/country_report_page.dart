@@ -29,7 +29,7 @@ class CountryReportPage extends StatelessWidget {
         ),
         defaultPanelState: PanelState.OPEN,
         minHeight: 90.0,
-        maxHeight: 245.0,
+        maxHeight: 260.0,
         parallaxEnabled: true,
         panel: BlocBuilder<CountryDataBloc, CountryDataState>(
           builder: (context, state) {
@@ -78,7 +78,7 @@ class CountryReportPage extends StatelessWidget {
               height: 10.0,
             ),
             Text(
-              'The virus mutated and we couldn\'t decode its RNA =(',
+              'Oops! we couldn\'t get the numbers for the selected country',
               style: Style.commonTextStyle,
             ),
           ],
@@ -99,7 +99,7 @@ class CountryReportPage extends StatelessWidget {
               height: 10.0,
             ),
             Text(
-              'Decoding RNA of the virus',
+              'Getting the latest numbers for the selected country',
               style: Style.commonTextStyle,
             ),
           ],

@@ -5,6 +5,7 @@ import 'package:crownapp/repository/country_data_repository.dart';
 import 'package:crownapp/ui/screens/country_charts/country_chart_page.dart';
 import 'package:crownapp/utils/crown_app_icons.dart';
 import 'package:crownapp/utils/text_style.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -37,23 +38,26 @@ class VirusDetails extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Spacer(),
+          SizedBox(height: 1),
           Padding(
             padding: EdgeInsets.only(left: 26.0),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  latestReport.country,
-                  style: Style.strongTitleTextStyle,
-                ),
-                Text(
-                  'Active cases: ${Style.numberFormatter.format(latestActive)}',
-                  style: Style.commonTextStyle,
-                ),
-              ],
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    latestReport.country,
+                    style: Style.strongTitleTextStyle,
+                  ),
+                  Text(
+                    'Active cases: ${Style.numberFormatter.format(latestActive)}',
+                    style: Style.subtitleTextStyle,
+                  ),
+                ],
+              ),
             ),
           ),
-          Spacer(),
+          SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
@@ -73,6 +77,7 @@ class VirusDetails extends StatelessWidget {
               ),
             ],
           ),
+          SizedBox(height: 8),
           Padding(
             padding: EdgeInsets.only(left: 1.0),
             child: Text(
@@ -80,7 +85,6 @@ class VirusDetails extends StatelessWidget {
               style: Style.commonTextStyle,
             ),
           ),
-          Spacer(),
           GestureDetector(
             child: Padding(
               padding: EdgeInsets.only(left: 1.0),
