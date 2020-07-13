@@ -1,5 +1,5 @@
 import 'package:crownapp/model/response/country_data.dart';
-import 'package:crownapp/ui/widgets/linear_chart.dart';
+import 'package:crownapp/ui/widgets/charts/numeric_linear_chart.dart';
 import 'package:flutter/material.dart';
 
 class CountryChartPage extends StatelessWidget {
