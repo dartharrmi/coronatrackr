@@ -1,0 +1,3 @@
+class CountryListEvent {
+  const CountryListEvent();
+}

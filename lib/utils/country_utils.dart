@@ -3,6 +3,21 @@ import 'package:country_pickers/country.dart';
 import 'package:country_pickers/country_pickers.dart';
 import 'package:flutter/material.dart';
 
+class Status {
+  final _value;
+
+  const Status._internal(this._value);
+
+  toString() => 'Enum.$_value';
+
+  static const CONFIRMED = const Status._internal('CONFIRMED');
+  static const DEATHS = const Status._internal('DEATHS');
+  static const RECOVERED = const Status._internal('RECOVERED');
+
+  static String getStatusName(Status status, String countrySlug) =>
+      '${status._value}-$countrySlug';
+}
+
 class CountryUtils {
   static Country getCountryByName(String name) {
     try {

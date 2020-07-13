@@ -1,32 +1,30 @@
 import 'package:country_pickers/country_pickers.dart';
+import 'package:crownapp/bloc/chart/country_chart_bloc.dart';
 import 'package:crownapp/model/models.dart';
+import 'package:crownapp/repository/country_data_repository.dart';
 import 'package:crownapp/ui/screens/country_charts/country_chart_page.dart';
-import 'package:crownapp/utils/country_utils.dart';
 import 'package:crownapp/utils/crown_app_icons.dart';
 import 'package:crownapp/utils/text_style.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class VirusDetails extends StatelessWidget {
   final String _country_icons_package = "country_pickers";
   final List<CountryData> countryData;
+  final String countryCode;
 
-  VirusDetails({this.countryData});
+  VirusDetails({this.countryData, this.countryCode});
 
   @override
   Widget build(BuildContext context) {
-    final country = CountryUtils.getCountryByName(countryData[0].name);
-
-    // Confirmed =|
-    final lengthConfirmed = countryData[0].details.length - 1;
-    final latestConfirmedReport = countryData[0].details[lengthConfirmed];
-
-    // Deaths =(
-    final deathsConfirmed = countryData[1].details.length - 1;
-    final latestDeathReport = countryData[1].details[deathsConfirmed];
-
-    // Recovered =)
-    final recoveredConfirmed = countryData[2].details.length - 1;
-    final latestRecoveredReport = countryData[2].details[recoveredConfirmed];
+    final latestReport = countryData[countryData.length - 1];
+    final latestUpdate = latestReport.date;
+    final latestActive = latestReport.active;
+    final latestConfirmed = latestReport.confirmed;
+    final latestDeaths = latestReport.deaths;
+    final latestRecovered = latestReport.recovered;
 
     // Country Details
     final virusDetails = Container(
@@ -40,37 +38,56 @@ class VirusDetails extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Spacer(),
+          SizedBox(height: 1),
           Padding(
             padding: EdgeInsets.only(left: 26.0),
-            child: Text(
-              country.name,
-              style: Style.strongTitleTextStyle,
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    latestReport.country,
+                    style: Style.strongTitleTextStyle,
+                  ),
+                  Text(
+                    'Active cases: ${Style.numberFormatter.format(latestActive)}',
+                    style: Style.subtitleTextStyle,
+                  ),
+                ],
+              ),
             ),
           ),
-          Spacer(),
+          SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               _statDetail(
-                value: '${latestConfirmedReport.cases} \nConfirmed',
-                image: CrownApp.iconfinder_emoji_emoticon_35_3638429,
+                value:
+                    '${Style.numberFormatter.format(latestConfirmed)} \nConfirmed',
+                image: CrownApp.ic_font_mask,
               ),
               _statDetail(
-                value: '${latestDeathReport.cases} \nDeaths',
-                image: CrownApp.iconfinder_disease_29_5766041,
+                value: '${Style.numberFormatter.format(latestDeaths)} \nDeaths',
+                image: CrownApp.ic_font_death,
               ),
               _statDetail(
-                value: '${latestRecoveredReport.cases} \nRecovered',
-                image: CrownApp
-                    .iconfinder_recovered_immune_strong_healthy_revive_5969421,
+                value:
+                    '${Style.numberFormatter.format(latestRecovered)} \nRecovered',
+                image: CrownApp.ic_font_recovered,
               ),
             ],
           ),
-          Spacer(),
+          SizedBox(height: 8),
+          Padding(
+            padding: EdgeInsets.only(left: 1.0),
+            child: Text(
+              'Last update: ${DateFormat("dd-MM-yyyy").format(latestUpdate)}',
+              style: Style.commonTextStyle,
+            ),
+          ),
           GestureDetector(
             child: Padding(
-              padding: EdgeInsets.only(left: 9.0),
+              padding: EdgeInsets.only(left: 1.0),
               child: Text(
                 'View more details',
                 style: Style.hyperlink,
@@ -80,8 +97,13 @@ class VirusDetails extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CountryChartPage(
-                    countryData: countryData,
+                  builder: (context) => BlocProvider(
+                    create: (context) => CountryChartBloc(
+                      countryDataRepository: DataRepository(),
+                    ),
+                    child: CountryChartPage(
+                      countrySlug: latestReport.country,
+                    ),
                   ),
                 ),
               )
@@ -92,7 +114,7 @@ class VirusDetails extends StatelessWidget {
     );
 
     return Container(
-      height: 180.0,
+      height: 300.0,
       margin: const EdgeInsets.symmetric(
         vertical: 16.0,
         horizontal: 24.0,
@@ -100,7 +122,7 @@ class VirusDetails extends StatelessWidget {
       child: Stack(
         children: <Widget>[
           _getCardDecoration(virusDetails),
-          _getCountryIcon(country.isoCode),
+          _getCountryIcon(countryCode),
         ],
       ),
     );

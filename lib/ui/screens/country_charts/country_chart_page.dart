@@ -1,19 +1,29 @@
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:crownapp/bloc/chart/country_chart_bloc.dart';
+import 'package:crownapp/bloc/chart/country_chart_event.dart';
+import 'package:crownapp/bloc/chart/country_chart_state.dart';
 import 'package:crownapp/model/notifier/stat_notifier.dart';
 import 'package:crownapp/model/response/country_data.dart';
+import 'package:crownapp/utils/country_utils.dart';
 import 'package:crownapp/utils/pair.dart';
 import 'package:crownapp/utils/text_style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class CountryChartPage extends StatelessWidget {
-  final List<CountryData> countryData;
+  final String countrySlug;
 
-  CountryChartPage({this.countryData});
+  CountryChartPage({this.countrySlug});
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<CountryChartBloc>(context).add(
+        CountryChartEvent(countryName: countrySlug, status: Status.CONFIRMED));
+    BlocProvider.of<CountryChartBloc>(context).add(
+        CountryChartEvent(countryName: countrySlug, status: Status.DEATHS));
+
     return Scaffold(
       appBar: AppBar(
         leading: Container(),
@@ -29,21 +39,54 @@ class CountryChartPage extends StatelessWidget {
         scrollDirection: Axis.vertical,
         child: Column(
           children: <Widget>[
-            SizedBox(
-              height: 550,
-              child: _getReport(countryData[0].details,
-                  id: countryData[0].details[0].status),
+            BlocBuilder<CountryChartBloc, CountryChartState>(
+              builder: (context, state) {
+                if (state is CountryChartError) {
+                  return Container();
+                } else if (state is CountryChartLoading) {
+                  return Container();
+                } else if (state is CountryChartAvailable) {
+                  if (state.countryChart.isNotEmpty) {
+                    return SizedBox(
+                      height: 550,
+                      child: _getReport(
+                        state.countryChart,
+                        id: 'Confirmed',
+                      ),
+                    );
+                  } else {
+                    return Container();
+                  }
+                } else {
+                  return Container();
+                }
+              },
             ),
-            SizedBox(
-              height: 550,
-              child: _getReport(countryData[1].details,
-                  id: countryData[1].details[0].status),
-            ),
-            SizedBox(
+        BlocBuilder<CountryChartBloc, CountryChartState>(
+          builder: (context, state) {
+            if (state is CountryChartError) {
+              return Container();
+            } else if (state is CountryChartLoading) {
+              return Container();
+            } else if (state is CountryChartAvailable) {
+              if (state.countryChart.isNotEmpty) {
+                return SizedBox(
+                  height: 550,
+                  child: StackedBarChart.withSampleData(),
+                );
+              } else {
+                return Container();
+              }
+            } else {
+              return Container();
+            }
+          },
+        ),
+           /*SizedBox(
               height: 550,
               child: _getReport(countryData[2].details,
                   id: countryData[2].details[0].status),
-            ),
+            ),*/
           ],
         ),
       ),
@@ -61,10 +104,10 @@ class CountryChartPage extends StatelessWidget {
     );
   }
 
-  Widget _getReport(List<CountryDetails> data, {String id}) {
+  Widget _getReport(List<CountryData> data, {String id}) {
     var timeSeriesCases = data
         .map((currentData) =>
-            _TimeSeriesCases(currentData.date, currentData.cases))
+            _TimeSeriesCases(currentData.date, currentData.confirmed))
         .toList();
     var series = [
       new charts.Series<_TimeSeriesCases, DateTime>(
@@ -80,7 +123,7 @@ class CountryChartPage extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => StatNotifier(),
       child: _ChartCard(
-          series, data[0].date, data[data.length - 1].date, data[0].status),
+          series, data[0].date, data[data.length - 1].date, "confirmed"),
     );
   }
 }
@@ -242,4 +285,83 @@ class _TimeSeriesCases {
   final int cases;
 
   _TimeSeriesCases(this.time, this.cases);
+}
+
+class StackedBarChart extends StatelessWidget {
+  final List<charts.Series> seriesList;
+  final bool animate;
+
+  StackedBarChart(this.seriesList, {this.animate});
+
+  /// Creates a stacked [BarChart] with sample data and no transition.
+  factory StackedBarChart.withSampleData() {
+    return new StackedBarChart(
+      _createSampleData(),
+      // Disable animations for image tests.
+      animate: false,
+    );
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return new charts.BarChart(
+      seriesList,
+      animate: animate,
+      barGroupingType: charts.BarGroupingType.stacked,
+    );
+  }
+
+  /// Create series list with multiple series
+  static List<charts.Series<OrdinalSales, String>> _createSampleData() {
+    final desktopSalesData = [
+      new OrdinalSales('2014', 5),
+      new OrdinalSales('2015', 25),
+      new OrdinalSales('2016', 100),
+      new OrdinalSales('2017', 75),
+    ];
+
+    final tableSalesData = [
+      new OrdinalSales('2014', 25),
+      new OrdinalSales('2015', 50),
+      new OrdinalSales('2016', 10),
+      new OrdinalSales('2017', 20),
+    ];
+
+    final mobileSalesData = [
+      new OrdinalSales('2014', 10),
+      new OrdinalSales('2015', 15),
+      new OrdinalSales('2016', 50),
+      new OrdinalSales('2017', 45),
+    ];
+
+    return [
+      new charts.Series<OrdinalSales, String>(
+        id: 'Desktop',
+        domainFn: (OrdinalSales sales, _) => sales.year,
+        measureFn: (OrdinalSales sales, _) => sales.sales,
+        data: desktopSalesData,
+      ),
+      new charts.Series<OrdinalSales, String>(
+        id: 'Tablet',
+        domainFn: (OrdinalSales sales, _) => sales.year,
+        measureFn: (OrdinalSales sales, _) => sales.sales,
+        data: tableSalesData,
+      ),
+      new charts.Series<OrdinalSales, String>(
+        id: 'Mobile',
+        domainFn: (OrdinalSales sales, _) => sales.year,
+        measureFn: (OrdinalSales sales, _) => sales.sales,
+        data: mobileSalesData,
+      ),
+    ];
+  }
+}
+
+/// Sample ordinal data type.
+class OrdinalSales {
+  final String year;
+  final int sales;
+
+  OrdinalSales(this.year, this.sales);
 }

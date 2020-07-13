@@ -1,7 +1,8 @@
 import 'package:crownapp/bloc/blocs.dart';
+import 'package:crownapp/model/country_centers.dart';
+import 'package:crownapp/model/models.dart';
 import 'package:crownapp/ui/widgets/virus_details/virus_details.dart';
 import 'package:crownapp/utils/text_style.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -9,16 +10,16 @@ import 'package:latlong/latlong.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class CountryReportPage extends StatelessWidget {
-  final String countryName;
+  final CovidCountry country;
 
   final circular = Radius.circular(15);
 
-  CountryReportPage(this.countryName);
+  CountryReportPage(this.country);
 
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<CountryDataBloc>(context)
-        .add(CountryDataEvent(countryName));
+        .add(CountryDataEvent(country.slug));
 
     return SlidingUpPanel(
         color: Color(0xFF040d3b),
@@ -28,7 +29,7 @@ class CountryReportPage extends StatelessWidget {
         ),
         defaultPanelState: PanelState.OPEN,
         minHeight: 90.0,
-        maxHeight: 200.0,
+        maxHeight: 260.0,
         parallaxEnabled: true,
         panel: BlocBuilder<CountryDataBloc, CountryDataState>(
           builder: (context, state) {
@@ -39,6 +40,7 @@ class CountryReportPage extends StatelessWidget {
             } else if (state is CountryDataAvailable) {
               return VirusDetails(
                 countryData: state.countryData,
+                countryCode: country.isoCode,
               );
             } else {
               return Container();
@@ -54,14 +56,9 @@ class CountryReportPage extends StatelessWidget {
               return _getMapProgressBar();
             }
             if (state is CountryDataAvailable) {
-              final lengthConfirmed = state.countryData[0].details.length - 1;
-              final latestConfirmedReport =
-                  state.countryData[0].details[lengthConfirmed];
-
-              final lat = latestConfirmedReport.latitude;
-              final lon = latestConfirmedReport.longitude;
-
-              return _getMap(lat, lon);
+              var countryCenter = countryCenterDetails[country.isoCode];
+              return _getMap(LatLng(countryCenter.item1, countryCenter.item2));
+              //return Container();
             }
             return Container();
           },
@@ -81,7 +78,7 @@ class CountryReportPage extends StatelessWidget {
               height: 10.0,
             ),
             Text(
-              'The virus mutated and we couldn\'t decode its RNA =(',
+              'Oops! we couldn\'t get the numbers for the selected country',
               style: Style.commonTextStyle,
             ),
           ],
@@ -102,7 +99,7 @@ class CountryReportPage extends StatelessWidget {
               height: 10.0,
             ),
             Text(
-              'Decoding RNA of the virus',
+              'Getting the latest numbers for the selected country',
               style: Style.commonTextStyle,
             ),
           ],
@@ -119,11 +116,11 @@ class CountryReportPage extends StatelessWidget {
         ),
       );
 
-  Widget _getMap(double lat, double lon) => Container(
+  Widget _getMap(LatLng countryCenter) => Container(
         constraints: BoxConstraints.expand(),
         child: FlutterMap(
           options: MapOptions(
-            center: LatLng(lat, lon),
+            center: countryCenter,
             zoom: 6.1,
           ),
           layers: [
@@ -137,7 +134,7 @@ class CountryReportPage extends StatelessWidget {
                 new Marker(
                   width: 80.0,
                   height: 80.0,
-                  point: LatLng(lat, lon),
+                  point: countryCenter,
                   builder: (ctx) => Container(
                     child: FlutterLogo(
                       size: 5.0,

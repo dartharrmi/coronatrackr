@@ -1,98 +1,66 @@
 import 'dart:convert';
 
 import 'package:crownapp/model/response/country_data.dart';
+import 'package:crownapp/model/response/covid_country.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sprintf/sprintf.dart';
 
 class NetworkManager {
   final _client = new http.Client();
+
   final _baseUrl = "https://api.covid19api.com/";
-  final _getConfirmedByCountry = "country/%s/status/confirmed";
-  final _getDeathsByCountry = "country/%s/status/deaths";
-  final _getRecoveredByCountry = "country/%s/status/recovered";
+  final _getAffectedCountries = "countries";
+  final _getCountryData = "total/country/%s";
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
-  Future<CountryData> getConfirmedByCountry(String countryName) async {
-    print('Looking confirmed for $countryName');
-
-    var responseConfirmed = await _client
-        .get(sprintf('$_baseUrl$_getConfirmedByCountry', [countryName]));
+  Future<List<CovidCountry>> getCountriesSlug() async {
+    print('Looking affected countries');
+    var response = await _client.get('$_baseUrl$_getAffectedCountries');
 
     try {
-      if (responseConfirmed.statusCode == 200) {
-        print('Response received successfuly');
-        print('Parsing data');
-        var rawData = json.decode(responseConfirmed.body);
-        print('$rawData');
-        final details = List<CountryDetails>.from(
-            rawData.map((item) => CountryDetails.fromJson(item)));
-        final countryName = (rawData as List).first['Country'];
-        CountryData countryData = CountryData(
-          name: countryName,
-          details: details,
-        );
+      if (response.statusCode == 200) {
+        print('Countries retrieved successfully');
+        print('Parsing response');
+
+        var rawData = json.decode(response.body);
+        print('Response:\n $rawData');
+        final listOfCountries = List<CovidCountry>.from(
+            rawData.map((item) => CovidCountry.fromMap(item)));
         print('Parsing data finished');
 
-        return countryData;
+        return listOfCountries;
       } else {
         throw new Exception('Error fetching data :(');
       }
     } catch (e) {
       print(e);
+      return [];
     }
   }
 
-  Future<CountryData> getDeathsByCountry(String countryName) async {
-    print('Looking deaths for $countryName');
-
-    var responseConfirmed = await _client
-        .get(sprintf('$_baseUrl$_getDeathsByCountry', [countryName]));
+  // @formatter:off
+  Future<List<CountryData>> getCountryData(String countrySlug) async {
+    print('Getting data for country identified with slug: $countrySlug');
+    var responseData =
+        await _client.get(sprintf('$_baseUrl$_getCountryData', [countrySlug]));
 
     try {
-      if (responseConfirmed.statusCode == 200) {
-        print('Response received successfuly');
+      // Confirmed
+      if (responseData.statusCode == 200) {
+        print('Response obtained');
         print('Parsing data');
-        var rawData = json.decode(responseConfirmed.body);
-        final details = List<CountryDetails>.from(
-            rawData.map((item) => CountryDetails.fromJson(item)));
-        final countryName = (rawData as List).first['Country'];
-        CountryData countryData = CountryData(
-          name: countryName,
-          details: details,
-        );
-        print('Parsing data finished');
-
-        return countryData;
-      } else {
-        throw new Exception('Error fetching data :(');
+        var rawData = json.decode(responseData.body);
+        print('Response: $rawData');
+        final listOfCountries = List<CountryData>.from(
+            rawData.map((item) => CountryData.fromJson(item)));
+        print('Finished parsing the data');
+        return listOfCountries;
       }
     } catch (e) {
       print(e);
+      return List<CountryData>();
     }
   }
-
-  Future<CountryData> getRecoveredByCountry(String countryName) async {
-    print('Looking recovered for $countryName');
-
-    var responseConfirmed = await _client
-        .get(sprintf('$_baseUrl$_getRecoveredByCountry', [countryName]));
-
-    try {
-      if (responseConfirmed.statusCode == 200) {
-        var rawData = json.decode(responseConfirmed.body);
-        final details = List<CountryDetails>.from(
-            rawData.map((item) => CountryDetails.fromJson(item)));
-        final countryName = (rawData as List).first['Country'];
-        CountryData countryData = CountryData(
-          name: countryName,
-          details: details,
-        );
-
-        return countryData;
-      } else {
-        throw new Exception('Error fetching data :(');
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
+// @formatter:on
 }
