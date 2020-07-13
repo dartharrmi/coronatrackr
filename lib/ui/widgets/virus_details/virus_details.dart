@@ -102,7 +102,7 @@ class VirusDetails extends StatelessWidget {
                       countryDataRepository: DataRepository(),
                     ),
                     child: CountryChartPage(
-                      countrySlug: latestReport.country,
+                      countryData: countryData,
                     ),
                   ),
                 ),
