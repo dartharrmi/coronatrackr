@@ -1,5 +1,6 @@
 import 'package:crownapp/model/response/country_data.dart';
 import 'package:crownapp/ui/widgets/charts/numeric_linear_chart.dart';
+import 'package:crownapp/utils/country_utils.dart';
 import 'package:flutter/material.dart';
 
 class CountryChartPage extends StatelessWidget {
@@ -41,19 +42,23 @@ class CountryChartPage extends StatelessWidget {
                     NumericLinearChart(
                       countryData: listOfConfirmed,
                       countryName: countryName,
+                      chartHeader: Status.CONFIRMED.toString(),
                     ),
                     NumericLinearChart(
                       countryData: listOfDeaths,
                       countryName: countryName,
+                      chartHeader: Status.DEATHS.toString(),
                     ),
                     NumericLinearChart(
                       countryData: listOfRecovered,
                       countryName: countryName,
+                      chartHeader: Status.RECOVERED.toString(),
                     ),
                     NumericLinearChart(
                       countryData: listOfConfirmed,
                       countryName: countryName,
-                    )
+                      chartHeader: Status.CONFIRMED.toString(),
+                    ),
                   ],
                 ),
               )

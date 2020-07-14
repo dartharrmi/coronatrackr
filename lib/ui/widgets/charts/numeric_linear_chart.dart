@@ -7,8 +7,15 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 class NumericLinearChart extends StatelessWidget {
   final List<NumericChartData> countryData;
   final String countryName;
+  final String chartTitle;
+  final String chartHeader;
 
-  NumericLinearChart({this.countryData, this.countryName});
+  NumericLinearChart({
+    this.countryData,
+    this.countryName,
+    this.chartTitle,
+    this.chartHeader,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +46,7 @@ class NumericLinearChart extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text(
-                            'Confirmed',
+                            chartHeader,
                             textAlign: TextAlign.left,
                             softWrap: true,
                             textScaleFactor: 1,
@@ -99,14 +106,14 @@ class NumericLinearChart extends StatelessWidget {
 
     return SfCartesianChart(
       plotAreaBorderWidth: 0,
-      title: ChartTitle(text: isCardView ? '' : 'Inflation - Consumer price'),
+      title: ChartTitle(text: isCardView ? '' : chartTitle),
       legend: Legend(
           isVisible: isCardView ? false : true,
           overflowMode: LegendItemOverflowMode.wrap),
       primaryXAxis: DateTimeAxis(
           intervalType: DateTimeIntervalType.months,
           edgeLabelPlacement: EdgeLabelPlacement.shift,
-          dateFormat: DateFormat.yM(),
+          dateFormat: DateFormat.yMd(),
           interval: 1,
           majorGridLines: MajorGridLines(width: 0)),
       primaryYAxis: NumericAxis(
