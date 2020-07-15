@@ -13,6 +13,7 @@ class Status {
   static const CONFIRMED = const Status._internal('Confirmed');
   static const DEATHS = const Status._internal('Deaths');
   static const RECOVERED = const Status._internal('Recovered');
+  static const ACTIVE = const Status._internal('Active');
 
   static String getStatusName(Status status, String countrySlug) =>
       '${status._value}-$countrySlug';
