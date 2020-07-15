@@ -1,5 +1,6 @@
 import 'package:crownapp/model/response/country_data.dart';
 import 'package:crownapp/ui/widgets/charts/numeric_linear_chart.dart';
+import 'package:crownapp/ui/widgets/charts/numeric_stacked_bar_chart.dart';
 import 'package:crownapp/utils/country_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -54,10 +55,10 @@ class CountryChartPage extends StatelessWidget {
                       countryName: countryName,
                       chartHeader: Status.RECOVERED.toString(),
                     ),
-                    NumericLinearChart(
-                      countryData: listOfConfirmed,
+                    StackedBarChart(
+                      countryData: countryData,
                       countryName: countryName,
-                      chartHeader: Status.CONFIRMED.toString(),
+                      chartHeader: "Cumulative",
                     ),
                   ],
                 ),

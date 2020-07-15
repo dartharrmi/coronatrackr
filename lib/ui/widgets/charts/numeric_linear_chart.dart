@@ -1,5 +1,5 @@
+import 'package:crownapp/utils/platform_utils.dart';
 import 'package:crownapp/utils/text_style.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -101,46 +101,41 @@ class NumericLinearChart extends StatelessWidget {
     );
   }
 
-  SfCartesianChart _buildChart() {
-    final isCardView = kIsWeb ? false : true;
+  SfCartesianChart _buildChart() => SfCartesianChart(
+        plotAreaBorderWidth: 0,
+        title: ChartTitle(text: isCardView ? '' : chartTitle),
+        legend: Legend(
+            isVisible: isCardView ? false : true,
+            overflowMode: LegendItemOverflowMode.wrap),
+        primaryXAxis: DateTimeAxis(
+            intervalType: DateTimeIntervalType.months,
+            edgeLabelPlacement: EdgeLabelPlacement.shift,
+            dateFormat: DateFormat.yMd(),
+            interval: 1,
+            majorGridLines: MajorGridLines(width: 0)),
+        primaryYAxis: NumericAxis(
+            labelFormat: '{value}',
+            numberFormat: Style.numberFormatter,
+            axisLine: AxisLine(width: 0),
+            majorTickLines: MajorTickLines(color: Colors.transparent)),
+        series: _getChartLineSeries(countryData),
+        tooltipBehavior: TooltipBehavior(enable: true, canShowMarker: false),
+      );
 
-    return SfCartesianChart(
-      plotAreaBorderWidth: 0,
-      title: ChartTitle(text: isCardView ? '' : chartTitle),
-      legend: Legend(
-          isVisible: isCardView ? false : true,
-          overflowMode: LegendItemOverflowMode.wrap),
-      primaryXAxis: DateTimeAxis(
-          intervalType: DateTimeIntervalType.months,
-          edgeLabelPlacement: EdgeLabelPlacement.shift,
-          dateFormat: DateFormat.yMd(),
-          interval: 1,
-          majorGridLines: MajorGridLines(width: 0)),
-      primaryYAxis: NumericAxis(
-          labelFormat: '{value}',
-          numberFormat: Style.numberFormatter,
-          axisLine: AxisLine(width: 0),
-          majorTickLines: MajorTickLines(color: Colors.transparent)),
-      series: getDefaultLineSeries(countryData),
-      tooltipBehavior: TooltipBehavior(enable: true, canShowMarker: false),
-    );
-  }
-
-  List<LineSeries<NumericChartData, DateTime>> getDefaultLineSeries(
-      List<NumericChartData> data) {
-    return <LineSeries<NumericChartData, DateTime>>[
-      LineSeries<NumericChartData, DateTime>(
-        animationDuration: 2500,
-        enableTooltip: true,
-        dataSource: countryData,
-        xValueMapper: (NumericChartData sales, _) => sales.x,
-        yValueMapper: (NumericChartData sales, _) => sales.y,
-        width: 2,
-        name: countryName,
-        markerSettings: MarkerSettings(isVisible: false),
-      ),
-    ];
-  }
+  List<LineSeries<NumericChartData, DateTime>> _getChartLineSeries(
+          List<NumericChartData> data) =>
+      <LineSeries<NumericChartData, DateTime>>[
+        LineSeries<NumericChartData, DateTime>(
+          animationDuration: 2500,
+          enableTooltip: true,
+          dataSource: countryData,
+          xValueMapper: (NumericChartData sales, _) => sales.x,
+          yValueMapper: (NumericChartData sales, _) => sales.y,
+          width: 2,
+          name: countryName,
+          markerSettings: MarkerSettings(isVisible: false),
+        ),
+      ];
 }
 
 class NumericChartData {
