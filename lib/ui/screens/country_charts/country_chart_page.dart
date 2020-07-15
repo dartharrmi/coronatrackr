@@ -1,17 +1,22 @@
+import 'package:country_pickers/utils/utils.dart';
 import 'package:crownapp/model/response/country_data.dart';
 import 'package:crownapp/ui/widgets/charts/numeric_linear_chart.dart';
 import 'package:crownapp/ui/widgets/charts/numeric_stacked_bar_chart.dart';
 import 'package:crownapp/utils/country_utils.dart';
+import 'package:crownapp/utils/platform_utils.dart';
+import 'package:crownapp/utils/text_style.dart';
 import 'package:flutter/material.dart';
 
 class CountryChartPage extends StatelessWidget {
   final List<CountryData> countryData;
+  final String countryCode;
 
-  CountryChartPage({this.countryData});
+  CountryChartPage({this.countryData, this.countryCode});
 
   @override
   Widget build(BuildContext context) {
     final countryName = countryData[0].country;
+
     final listOfConfirmed =
         countryData.map((e) => NumericChartData(e.date, e.confirmed)).toList();
     final listOfDeaths =
@@ -22,10 +27,34 @@ class CountryChartPage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           leading: Container(),
-          title: Center(
-            child: Title(
-              color: Colors.white,
-              child: Text('Details'),
+          title: Material(
+            type: MaterialType.transparency,
+            child: Center(
+              child: Row(children: <Widget>[
+                Hero(
+                  tag: heroCountryFlag,
+                  child: CircleAvatar(
+                    radius: 14.0,
+                    backgroundImage: AssetImage(
+                      CountryPickerUtils.getFlagImageAssetPath(countryCode),
+                      package: country_icons_package,
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 5,
+                ),
+                Title(
+                  color: Colors.white,
+                  child: Hero(
+                    tag: heroCountryName,
+                    child: Text(
+                      countryName,
+                      style: Style.strongTitleTextStyle,
+                    ),
+                  ),
+                ),
+              ]),
             ),
           ),
         ),
