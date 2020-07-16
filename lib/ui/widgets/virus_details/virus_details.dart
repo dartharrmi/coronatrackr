@@ -4,6 +4,7 @@ import 'package:crownapp/model/models.dart';
 import 'package:crownapp/repository/country_data_repository.dart';
 import 'package:crownapp/ui/screens/country_charts/country_chart_page.dart';
 import 'package:crownapp/utils/crown_app_icons.dart';
+import 'package:crownapp/utils/platform_utils.dart';
 import 'package:crownapp/utils/text_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class VirusDetails extends StatelessWidget {
-  final String _country_icons_package = "country_pickers";
   final List<CountryData> countryData;
   final String countryCode;
 
@@ -45,9 +45,12 @@ class VirusDetails extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: Column(
                 children: <Widget>[
-                  Text(
-                    latestReport.country,
-                    style: Style.strongTitleTextStyle,
+                  Hero(
+                    tag: heroCountryName,
+                    child: Text(
+                      latestReport.country,
+                      style: Style.strongTitleTextStyle,
+                    ),
                   ),
                   Text(
                     'Active cases: ${Style.numberFormatter.format(latestActive)}',
@@ -102,7 +105,8 @@ class VirusDetails extends StatelessWidget {
                       countryDataRepository: DataRepository(),
                     ),
                     child: CountryChartPage(
-                      countrySlug: latestReport.country,
+                      countryData: countryData,
+                      countryCode: countryCode,
                     ),
                   ),
                 ),
@@ -173,11 +177,14 @@ class VirusDetails extends StatelessWidget {
         height: 95.0,
         width: 95.0,
         child: Center(
-          child: CircleAvatar(
-            radius: 42.0,
-            backgroundImage: AssetImage(
-              CountryPickerUtils.getFlagImageAssetPath(countryIsoCode),
-              package: _country_icons_package,
+          child: Hero(
+            tag: heroCountryFlag,
+            child: CircleAvatar(
+              radius: 42.0,
+              backgroundImage: AssetImage(
+                CountryPickerUtils.getFlagImageAssetPath(countryIsoCode),
+                package: country_icons_package,
+              ),
             ),
           ),
         ),

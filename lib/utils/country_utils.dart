@@ -8,11 +8,12 @@ class Status {
 
   const Status._internal(this._value);
 
-  toString() => 'Enum.$_value';
+  toString() => '$_value';
 
-  static const CONFIRMED = const Status._internal('CONFIRMED');
-  static const DEATHS = const Status._internal('DEATHS');
-  static const RECOVERED = const Status._internal('RECOVERED');
+  static const CONFIRMED = const Status._internal('Confirmed');
+  static const DEATHS = const Status._internal('Deaths');
+  static const RECOVERED = const Status._internal('Recovered');
+  static const ACTIVE = const Status._internal('Active');
 
   static String getStatusName(Status status, String countrySlug) =>
       '${status._value}-$countrySlug';

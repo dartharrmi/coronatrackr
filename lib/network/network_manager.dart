@@ -54,6 +54,7 @@ class NetworkManager {
         print('Response: $rawData');
         final listOfCountries = List<CountryData>.from(
             rawData.map((item) => CountryData.fromJson(item)));
+        listOfCountries.removeWhere((element) => element.confirmed == 0);
         print('Finished parsing the data');
         return listOfCountries;
       }
