@@ -1,3 +1,4 @@
+import 'package:crownapp/ui/pages/charts/full_screen_chart.dart';
 import 'package:crownapp/utils/platform_utils.dart';
 import 'package:crownapp/utils/text_style.dart';
 import 'package:flutter/material.dart';
@@ -37,8 +38,8 @@ class NumericLinearChart extends StatelessWidget {
                 InkWell(
                   splashColor: Colors.grey.withOpacity(0.4),
                   onTap: () {
-                    /*Feedback.forLongPress(context);
-                    expandSample(context, list[position], model);*/
+                    Feedback.forLongPress(context);
+                    expandSample(context, _buildChart());
                   },
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
@@ -63,21 +64,21 @@ class NumericLinearChart extends StatelessWidget {
                               const Padding(
                                 padding: EdgeInsets.only(left: 15),
                               ),
-                              /*Container(
-                                    height: 24,
-                                    width: 24,
-                                    color: Colors.transparent,
-                                    child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          5, 0, 5, 5),
-                                      child: Image.asset(
-                                          'images/fullscreen.png',
-                                          fit: BoxFit.contain,
-                                          height: 20,
-                                          width: 20,
-                                          color: model.backgroundColor),
-                                    ),
-                                  ),*/
+                              Container(
+                                height: 24,
+                                width: 24,
+                                color: Colors.transparent,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(5, 0, 5, 5),
+                                  child: Image.asset(
+                                    'assets/images/ic_fullscreen.png',
+                                    fit: BoxFit.contain,
+                                    height: 20,
+                                    width: 20,
+                                  ),
+                                ),
+                              ),
                             ],
                           )),
                         ]),
@@ -136,6 +137,13 @@ class NumericLinearChart extends StatelessWidget {
           markerSettings: MarkerSettings(isVisible: false),
         ),
       ];
+
+  void expandSample(BuildContext context, Widget widget) {
+    Navigator.push<dynamic>(
+        context,
+        MaterialPageRoute<dynamic>(
+            builder: (BuildContext context) => FullScreenChart(_buildChart())));
+  }
 }
 
 class NumericChartData {
