@@ -26,17 +26,16 @@ dependencies:
   flutter_map: 0.8.2
   latlong: ^0.6.1
   sliding_up_panel: ^1.0.0
-  charts_flutter: ^0.9.0
   http: ^0.12.0+4
   provider: ^4.0.4
   sprintf: "^4.0.0"
   flutter_bloc: ^3.2.0
   country_pickers: ^1.2.0
-  palette_generator: ^0.2.2
   intl: ^0.16.1
-  lottie: ^0.3.3
+  lottie: ^0.4.1
   flutter_launcher_icons: ^0.7.4
   shared_preferences: ^0.5.6+3
+  syncfusion_flutter_charts: ^18.1.52
 
 dev_dependencies:
   flutter_test:
@@ -56,6 +55,7 @@ flutter:
     - assets/anims/virus_loader.gif
     - assets/anims/virus_error.gif
     - assets/anims/loader_splash.json
+    - assets/images/ic_fullscreen.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
