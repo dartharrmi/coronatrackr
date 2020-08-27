@@ -44,24 +44,24 @@ class NumericLinearChart extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
                     child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            chartHeader,
-                            textAlign: TextAlign.left,
-                            softWrap: true,
-                            textScaleFactor: 1,
-                            overflow: TextOverflow.fade,
-                            style: TextStyle(
-                                fontFamily: 'HeeboMedium',
-                                fontSize: 16.0,
-                                color: const Color.fromRGBO(51, 51, 51, 1),
-                                letterSpacing: 0.2),
-                          ),
-                          Container(
-                              child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          chartHeader,
+                          textAlign: TextAlign.left,
+                          softWrap: true,
+                          textScaleFactor: 1,
+                          overflow: TextOverflow.fade,
+                          style: TextStyle(
+                              fontFamily: 'HeeboMedium',
+                              fontSize: 16.0,
+                              color: const Color.fromRGBO(51, 51, 51, 1),
+                              letterSpacing: 0.2),
+                        ),
+                        Container(
+                          child: Row(
                             children: <Widget>[
-                              const Padding(
+                              Padding(
                                 padding: EdgeInsets.only(left: 15),
                               ),
                               Container(
@@ -80,8 +80,10 @@ class NumericLinearChart extends StatelessWidget {
                                 ),
                               ),
                             ],
-                          )),
-                        ]),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Container(
@@ -106,6 +108,7 @@ class NumericLinearChart extends StatelessWidget {
         plotAreaBorderWidth: 0,
         title: ChartTitle(text: isCardView ? '' : chartTitle),
         legend: Legend(
+            position: LegendPosition.bottom,
             isVisible: isCardView ? false : true,
             overflowMode: LegendItemOverflowMode.wrap),
         primaryXAxis: DateTimeAxis(

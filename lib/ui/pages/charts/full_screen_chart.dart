@@ -34,7 +34,7 @@ class FullScreenChart extends StatelessWidget {
                 )
               ],
             ),
-            child: ,
+            child: _widget,
           ),
         ),
       ),
